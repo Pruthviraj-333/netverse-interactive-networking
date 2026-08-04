@@ -1,62 +1,62 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, X, Send, Trash2, ExternalLink, AlertCircle } from 'lucide-react';
-import knowledgeBase from '../../data/knowledgeBase';
+import { Bot, Send, Trash2, ExternalLink, AlertCircle, Zap, Cpu } from 'lucide-react';
+import { streamGroqAnswer, GROQ_AVAILABLE } from '../../utils/groq';
 import { useTutorStore } from '../../stores';
 import { cn, uid } from '../../utils/helpers';
-import type { TutorMessage, KnowledgeEntry } from '../../types';
+import type { TutorMessage } from '../../types';
 
-/**
- * Keyword-based answer lookup from the local knowledge base.
- * Phase 2: Replace this function body with a Groq API call.
- *
- * Matching strategy:
- * 1. Tokenise the query to lowercase words
- * 2. Score each KB entry by number of keyword matches
- * 3. Return best match; if score = 0, return the fallback "uncertain" entry
- */
-function lookupAnswer(query: string): KnowledgeEntry {
-  const tokens = query.toLowerCase().split(/\W+/).filter(Boolean);
-  let bestMatch: KnowledgeEntry | null = null;
-  let bestScore = 0;
-
-  for (const entry of knowledgeBase) {
-    if (entry.confidence === 'uncertain') continue; // skip fallback in scoring
-    let score = 0;
-    for (const kw of entry.keywords) {
-      if (tokens.some((t) => t.includes(kw) || kw.includes(t))) score += 1;
-    }
-    if (score > bestScore) { bestScore = score; bestMatch = entry; }
-  }
-
-  const fallback = knowledgeBase.find((e) => e.id === 'uncertain-fallback')!;
-  return bestScore > 0 && bestMatch ? bestMatch : fallback;
-}
-
-function TypingIndicator() {
+// ─── Typing indicator ─────────────────────────────────────────────────────────
+function TypingIndicator({ streaming }: { streaming: boolean }) {
   return (
     <div className="flex items-end gap-2 mb-3">
       <div className="w-6 h-6 rounded-full bg-violet-500/20 border border-violet-500/30 flex items-center justify-center shrink-0">
         <Bot size={12} className="text-violet-400" />
       </div>
       <div className="glass rounded-2xl rounded-bl-sm px-3 py-2.5">
-        <div className="flex gap-1 items-center">
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={i}
-              className="w-1.5 h-1.5 rounded-full bg-violet-400"
-              animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
-              transition={{ duration: 0.8, delay: i * 0.2, repeat: Infinity }}
-            />
-          ))}
-        </div>
+        {streaming ? (
+          <div className="flex items-center gap-1.5 text-xs text-violet-400">
+            <Cpu size={11} className="animate-pulse" />
+            <span>Thinking…</span>
+          </div>
+        ) : (
+          <div className="flex gap-1 items-center">
+            {[0, 1, 2].map((i) => (
+              <motion.div
+                key={i}
+                className="w-1.5 h-1.5 rounded-full bg-violet-400"
+                animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
+                transition={{ duration: 0.8, delay: i * 0.2, repeat: Infinity }}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-function TutorMessageBubble({ msg }: { msg: TutorMessage }) {
+// ─── Message bubble ───────────────────────────────────────────────────────────
+function TutorMessageBubble({ msg, isStreaming }: { msg: TutorMessage; isStreaming?: boolean }) {
   const isUser = msg.role === 'user';
+
+  // Parse simple markdown: **bold**, `code`
+  const renderContent = (text: string) => {
+    const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i} className="text-white font-semibold">{part.slice(2, -2)}</strong>;
+      }
+      if (part.startsWith('`') && part.endsWith('`')) {
+        return (
+          <code key={i} className="font-mono text-[11px] px-1 py-0.5 rounded bg-white/[0.08] text-electric-300">
+            {part.slice(1, -1)}
+          </code>
+        );
+      }
+      return <span key={i}>{part}</span>;
+    });
+  };
 
   return (
     <motion.div
@@ -69,7 +69,8 @@ function TutorMessageBubble({ msg }: { msg: TutorMessage }) {
           <Bot size={12} className="text-violet-400" />
         </div>
       )}
-      <div className={cn('max-w-[85%] space-y-2', isUser ? 'items-end' : 'items-start')}>
+
+      <div className={cn('max-w-[88%] space-y-2', isUser ? 'items-end' : 'items-start')}>
         <div
           className={cn(
             'px-3 py-2.5 rounded-2xl text-sm leading-relaxed',
@@ -78,7 +79,10 @@ function TutorMessageBubble({ msg }: { msg: TutorMessage }) {
               : 'glass rounded-bl-sm text-slate-300'
           )}
         >
-          {msg.content}
+          <span>{renderContent(msg.content)}</span>
+          {isStreaming && (
+            <span className="inline-block w-0.5 h-4 bg-violet-400 ml-0.5 animate-pulse align-middle" />
+          )}
         </div>
 
         {/* References */}
@@ -93,7 +97,7 @@ function TutorMessageBubble({ msg }: { msg: TutorMessage }) {
                 className="flex items-center gap-1 text-[10px] text-amber-400/80 hover:text-amber-300 border border-amber-500/20 rounded-full px-2 py-0.5 transition-colors"
               >
                 <ExternalLink size={9} />
-                {ref.rfcNumber ? `RFC ${ref.rfcNumber}` : ref.title.slice(0, 20)}
+                {ref.rfcNumber ? `RFC ${ref.rfcNumber}` : ref.title.slice(0, 22)}
               </a>
             ))}
           </div>
@@ -103,7 +107,7 @@ function TutorMessageBubble({ msg }: { msg: TutorMessage }) {
         {msg.confidence === 'uncertain' && (
           <div className="flex items-center gap-1.5 text-[11px] text-amber-400/70">
             <AlertCircle size={11} />
-            <span>Uncertain — please verify with official docs</span>
+            <span>Uncertain — verify with official docs</span>
           </div>
         )}
       </div>
@@ -111,53 +115,102 @@ function TutorMessageBubble({ msg }: { msg: TutorMessage }) {
   );
 }
 
+// ─── Suggested questions ──────────────────────────────────────────────────────
+const SUGGESTED = [
+  'How does the TCP 3-way handshake work?',
+  'Explain DNS resolution step by step',
+  'What is the difference between TCP and UDP?',
+  'How does NAT work in AWS VPC?',
+  'What happens during a TLS 1.3 handshake?',
+  'How does ARP work on a local network?',
+  'What is DHCP and the DORA process?',
+];
+
+// ─── Main component ───────────────────────────────────────────────────────────
 export default function AITutor() {
   const { messages, isTyping, addMessage, setTyping, clearMessages } = useTutorStore();
   const [input, setInput] = useState('');
+  const [streamingId, setStreamingId] = useState<string | null>(null);
+  const [streamingContent, setStreamingContent] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+  }, [messages, isTyping, streamingContent]);
 
+  // Welcome message on first open
   useEffect(() => {
-    // Welcome message on first open
     if (messages.length === 0) {
       addMessage({
         id: uid(),
         role: 'assistant',
-        content:
-          "Hi! I'm the NetVerse AI tutor. Ask me anything about networking — OSI model, DNS, TCP, ARP, subnetting, and more. I'll always cite official RFCs when I'm confident.",
+        content: GROQ_AVAILABLE
+          ? "Hi! I'm the NetVerse AI Tutor powered by Llama 3.3 via Groq. Ask me anything about networking — protocols, packet flows, OSI layers, Linux commands, cloud architecture, or Kubernetes networking. I always cite RFCs when I'm confident."
+          : "Hi! I'm the NetVerse AI Tutor (local knowledge base mode). Ask me about OSI, DNS, TCP, ARP, subnetting, and more.",
         timestamp: Date.now(),
         confidence: 'high',
       });
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSend = () => {
-    const q = input.trim();
-    if (!q) return;
+  const handleSend = useCallback(async (queryOverride?: string) => {
+    const q = (queryOverride ?? input).trim();
+    if (!q || isTyping) return;
 
+    // Add user message
     addMessage({ id: uid(), role: 'user', content: q, timestamp: Date.now(), confidence: 'high' });
     setInput('');
     setTyping(true);
 
-    // Simulate network latency for more natural UX
-    setTimeout(() => {
-      const entry = lookupAnswer(q);
-      setTyping(false);
-      addMessage({
-        id: uid(),
-        role: 'assistant',
-        content: entry.answer,
-        relatedTopicId: entry.topicId,
-        references: entry.references,
-        timestamp: Date.now(),
-        confidence: entry.confidence,
-      });
-    }, 600 + Math.random() * 400);
-  };
+    // Build history for context
+    const history = messages
+      .filter((m) => m.role === 'user' || m.role === 'assistant')
+      .map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }));
+
+    // Create placeholder for streaming message
+    const assistantId = uid();
+    setStreamingId(assistantId);
+    setStreamingContent('');
+
+    await streamGroqAnswer(
+      q,
+      history,
+      // onChunk — update streaming display
+      (token) => {
+        setStreamingContent((prev) => prev + token);
+      },
+      // onDone — commit final message
+      (fullText) => {
+        setStreamingId(null);
+        setStreamingContent('');
+        setTyping(false);
+        addMessage({
+          id: assistantId,
+          role: 'assistant',
+          content: fullText,
+          timestamp: Date.now(),
+          confidence: 'high',
+        });
+      },
+      // onError / fallback
+      (fallbackText, fromLocal) => {
+        setStreamingId(null);
+        setStreamingContent('');
+        setTyping(false);
+        addMessage({
+          id: assistantId,
+          role: 'assistant',
+          content: fallbackText,
+          timestamp: Date.now(),
+          confidence: fromLocal ? 'medium' : 'uncertain',
+        });
+      }
+    );
+  }, [input, isTyping, messages, addMessage, setTyping]);
+
+  const shownMessages = messages;
+  const showSuggestions = shownMessages.length <= 1 && !isTyping;
 
   return (
     <motion.aside
@@ -176,27 +229,78 @@ export default function AITutor() {
           </div>
           <div>
             <div className="text-sm font-semibold text-white">AI Tutor</div>
-            <div className="text-[10px] text-slate-500">RFC-grounded answers</div>
+            <div className="flex items-center gap-1 text-[10px] text-slate-500">
+              {GROQ_AVAILABLE ? (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-emerald-400/80">Groq · Llama 3.3</span>
+                </>
+              ) : (
+                <span>Local knowledge base</span>
+              )}
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-1">
-          <button onClick={clearMessages} className="btn-icon" title="Clear chat">
-            <Trash2 size={14} />
-          </button>
-        </div>
-      </div>
-
-      {/* Phase 1 notice */}
-      <div className="mx-3 mt-3 px-3 py-2 rounded-lg bg-amber-500/5 border border-amber-500/20 text-[11px] text-amber-400/80">
-        Phase 1: Local knowledge base. Phase 2 will use Groq LLM.
+        <button onClick={clearMessages} className="btn-icon" title="Clear chat">
+          <Trash2 size={14} />
+        </button>
       </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-3 py-3">
-        {messages.map((msg) => (
-          <TutorMessageBubble key={msg.id} msg={msg} />
+        {shownMessages.map((msg) => (
+          <TutorMessageBubble
+            key={msg.id}
+            msg={msg}
+            isStreaming={msg.id === streamingId}
+          />
         ))}
-        {isTyping && <TypingIndicator />}
+
+        {/* Live streaming bubble */}
+        {streamingId && streamingContent && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-end gap-2 mb-3"
+          >
+            <div className="w-6 h-6 rounded-full bg-violet-500/20 border border-violet-500/30 flex items-center justify-center shrink-0">
+              <Bot size={12} className="text-violet-400" />
+            </div>
+            <div className="glass rounded-2xl rounded-bl-sm px-3 py-2.5 max-w-[88%] text-sm text-slate-300 leading-relaxed">
+              {streamingContent}
+              <span className="inline-block w-0.5 h-4 bg-violet-400 ml-0.5 animate-pulse align-middle" />
+            </div>
+          </motion.div>
+        )}
+
+        {/* Typing indicator (before streaming starts) */}
+        {isTyping && !streamingContent && <TypingIndicator streaming={GROQ_AVAILABLE} />}
+
+        {/* Suggested questions */}
+        <AnimatePresence>
+          {showSuggestions && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="mt-2 space-y-1.5"
+            >
+              <p className="text-[10px] text-slate-600 mb-2 flex items-center gap-1">
+                <Zap size={10} /> Try asking:
+              </p>
+              {SUGGESTED.map((q) => (
+                <button
+                  key={q}
+                  onClick={() => handleSend(q)}
+                  className="w-full text-left text-[11px] text-slate-400 hover:text-white glass rounded-lg px-3 py-2 transition-all hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]"
+                >
+                  {q}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div ref={bottomRef} />
       </div>
 
@@ -209,19 +313,20 @@ export default function AITutor() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask about networking…"
-            className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 outline-none"
+            placeholder={isTyping ? 'Waiting for response…' : 'Ask about networking…'}
+            disabled={isTyping}
+            className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 outline-none disabled:opacity-40"
             aria-label="Ask AI tutor"
           />
           <motion.button
-            onClick={handleSend}
-            disabled={!input.trim()}
+            onClick={() => handleSend()}
+            disabled={!input.trim() || isTyping}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             className={cn(
               'w-7 h-7 rounded-lg flex items-center justify-center transition-all',
-              input.trim()
-                ? 'bg-violet-600 text-white'
+              input.trim() && !isTyping
+                ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/20'
                 : 'bg-white/[0.05] text-slate-600'
             )}
             aria-label="Send message"
@@ -230,7 +335,7 @@ export default function AITutor() {
           </motion.button>
         </div>
         <p className="text-center text-[10px] text-slate-600 mt-2">
-          AI may be wrong — always verify with official docs
+          {GROQ_AVAILABLE ? 'Powered by Groq · RFC-grounded' : 'AI may be wrong — verify with official docs'}
         </p>
       </div>
     </motion.aside>

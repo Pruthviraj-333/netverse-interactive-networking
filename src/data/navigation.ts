@@ -31,7 +31,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { id: 'ip-addressing', title: 'IP Addressing & CIDR', path: '/topic/ip-addressing', topicId: 'ip-addressing' },
       { id: 'subnetting',    title: 'Subnetting',           path: '/topic/subnetting',    topicId: 'subnetting' },
       { id: 'routing',       title: 'Routing',              path: '/topic/routing',       topicId: 'routing', badge: 'Soon' },
-      { id: 'nat',           title: 'NAT / PAT',            path: '/topic/nat',           topicId: 'nat',     badge: 'Soon' },
+      { id: 'nat',           title: 'NAT / PAT',            path: '/topic/nat',           topicId: 'nat' },
     ],
   },
   {
@@ -41,8 +41,8 @@ export const NAV_SECTIONS: NavSection[] = [
     color: '#3b82f6',
     items: [
       { id: 'tcp', title: 'TCP',   path: '/topic/tcp', topicId: 'tcp' },
-      { id: 'udp', title: 'UDP',   path: '/topic/udp', topicId: 'udp', badge: 'Soon' },
-      { id: 'icmp', title: 'ICMP', path: '/topic/icmp', topicId: 'icmp', badge: 'Soon' },
+      { id: 'udp', title: 'UDP',   path: '/topic/udp', topicId: 'udp' },
+      { id: 'icmp', title: 'ICMP', path: '/topic/icmp', topicId: 'icmp' },
     ],
   },
   {
@@ -52,9 +52,9 @@ export const NAV_SECTIONS: NavSection[] = [
     color: '#8b5cf6',
     items: [
       { id: 'dns',   title: 'DNS',         path: '/topic/dns',   topicId: 'dns' },
-      { id: 'dhcp',  title: 'DHCP',        path: '/topic/dhcp',  topicId: 'dhcp',  badge: 'Soon' },
+      { id: 'dhcp',  title: 'DHCP',        path: '/topic/dhcp',  topicId: 'dhcp' },
       { id: 'http',  title: 'HTTP / REST', path: '/topic/http',  topicId: 'http',  badge: 'Soon' },
-      { id: 'https', title: 'HTTPS & TLS', path: '/topic/https', topicId: 'https', badge: 'Soon' },
+      { id: 'https', title: 'HTTPS & TLS', path: '/topic/https', topicId: 'https' },
       { id: 'ssh',   title: 'SSH',         path: '/topic/ssh',   topicId: 'ssh',   badge: 'Soon' },
     ],
   },

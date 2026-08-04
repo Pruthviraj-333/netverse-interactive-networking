@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
@@ -7,6 +7,11 @@ import DNSPage from './pages/topics/DNSPage';
 import TCPPage from './pages/topics/TCPPage';
 import ARPPage from './pages/topics/ARPPage';
 import SubnettingPage from './pages/topics/SubnettingPage';
+import DHCPPage from './pages/topics/DHCPPage';
+import NATPATPage from './pages/topics/NATPATPage';
+import UDPPage from './pages/topics/UDPPage';
+import ICMPPage from './pages/topics/ICMPPage';
+import HTTPSPage from './pages/topics/HTTPSPage';
 
 function ComingSoon({ title }: { title: string }) {
   return (
@@ -41,17 +46,19 @@ export default function App() {
           <Route path="/topic/ip-addressing" element={<SubnettingPage />} />
           <Route path="/topic/subnetting"    element={<Navigate to="/topic/ip-addressing" replace />} />
 
-          {/* Phase 2 stubs */}
+          {/* Phase 2 — Live */}
+          <Route path="/topic/dhcp"          element={<DHCPPage />} />
+          <Route path="/topic/nat"           element={<NATPATPage />} />
+          <Route path="/topic/udp"           element={<UDPPage />} />
+          <Route path="/topic/icmp"          element={<ICMPPage />} />
+          <Route path="/topic/https"         element={<HTTPSPage />} />
+
+          {/* Still coming */}
           <Route path="/topic/tcpip-model"   element={<ComingSoon title="TCP/IP Model" />} />
           <Route path="/topic/ethernet"      element={<ComingSoon title="Ethernet & Frames" />} />
           <Route path="/topic/mac-address"   element={<ComingSoon title="MAC Addresses" />} />
           <Route path="/topic/routing"       element={<ComingSoon title="Routing" />} />
-          <Route path="/topic/nat"           element={<ComingSoon title="NAT / PAT" />} />
-          <Route path="/topic/udp"           element={<ComingSoon title="UDP" />} />
-          <Route path="/topic/icmp"          element={<ComingSoon title="ICMP" />} />
-          <Route path="/topic/dhcp"          element={<ComingSoon title="DHCP" />} />
           <Route path="/topic/http"          element={<ComingSoon title="HTTP / REST" />} />
-          <Route path="/topic/https"         element={<ComingSoon title="HTTPS & TLS" />} />
           <Route path="/topic/ssh"           element={<ComingSoon title="SSH" />} />
           <Route path="/topic/firewalls"     element={<ComingSoon title="Firewalls & iptables" />} />
           <Route path="/topic/load-balancing" element={<ComingSoon title="Load Balancing" />} />

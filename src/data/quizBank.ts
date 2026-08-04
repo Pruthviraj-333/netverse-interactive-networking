@@ -179,6 +179,183 @@ export const quizBank: QuizQuestion[] = [
     ],
     explanation: 'For same-subnet communication, the host does ARP resolution to get the MAC, then sends the Ethernet frame directly. Cross-subnet traffic goes to the gateway MAC (which ARP-resolves the gateway, not the remote host).',
   },
+
+  // ── DHCP ─────────────────────────────────────────────────────────────────────
+  {
+    id: 'dhcp-q1',
+    topicId: 'dhcp',
+    type: 'mcq',
+    difficulty: 'beginner',
+    question: 'What is the correct order of the DHCP DORA process?',
+    options: [
+      { id: 'a', text: 'Offer → Discover → Request → Acknowledge', isCorrect: false, explanation: 'The server cannot Offer before the client Discovers.' },
+      { id: 'b', text: 'Discover → Offer → Request → Acknowledge', isCorrect: true, explanation: 'RFC 2131 §3.1: Client broadcasts DHCPDISCOVER → Server unicasts DHCPOFFER → Client broadcasts DHCPREQUEST → Server sends DHCPACK.' },
+      { id: 'c', text: 'Discover → Request → Offer → Acknowledge', isCorrect: false, explanation: 'The client cannot Request before receiving an Offer from the server.' },
+      { id: 'd', text: 'Request → Discover → Offer → Acknowledge', isCorrect: false, explanation: 'The client must first Discover available servers before Requesting.' },
+    ],
+    explanation: 'DORA: Discover (client broadcasts) → Offer (server offers an IP) → Request (client accepts, still broadcast) → Acknowledge (server confirms). RFC 2131 §3.1.',
+    rfcNote: 'RFC 2131 §3.1',
+  },
+  {
+    id: 'dhcp-q2',
+    topicId: 'dhcp',
+    type: 'mcq',
+    difficulty: 'intermediate',
+    question: 'Why is the DHCPREQUEST message sent as a broadcast, even though the client already knows the server\'s IP from the DHCPOFFER?',
+    options: [
+      { id: 'a', text: 'The client still has no IP address and cannot send unicast', isCorrect: false, explanation: 'This was true for DHCPDISCOVER, but the real reason for broadcasting DHCPREQUEST is different.' },
+      { id: 'b', text: 'To inform all DHCP servers on the segment which offer was accepted, so others release their reserved IPs', isCorrect: true, explanation: 'RFC 2131 §3.1: When multiple DHCP servers respond with offers, all reserve an IP. DHCPREQUEST must be broadcast so all servers see it and those not selected release their reservation.' },
+      { id: 'c', text: 'UDP does not support unicast before DHCPACK', isCorrect: false, explanation: 'UDP supports unicast at any time. This is a DHCP protocol design decision, not a UDP limitation.' },
+      { id: 'd', text: 'To allow the router to update its ARP cache', isCorrect: false, explanation: 'ARP cache updates happen separately via Gratuitous ARP after the lease is confirmed.' },
+    ],
+    explanation: 'RFC 2131 §3.1: DHCPREQUEST is broadcast so that all DHCP servers on the segment learn which offer was accepted. Non-selected servers release their reserved address back to their pool.',
+    rfcNote: 'RFC 2131 §3.1',
+  },
+  {
+    id: 'dhcp-q3',
+    topicId: 'dhcp',
+    type: 'scenario',
+    difficulty: 'intermediate',
+    question: 'A DHCP client on VLAN 20 (192.168.20.0/24) cannot reach the DHCP server on VLAN 1 (10.0.0.0/24). The client gets "169.254.x.x" (APIPA). What is most likely missing?',
+    context: 'Network uses VLANs. DHCP server is centralized on VLAN 1. Client is on VLAN 20 and gets 169.254.x.x address after 60 seconds.',
+    options: [
+      { id: 'a', text: 'The DHCP server pool is exhausted', isCorrect: false, explanation: 'Pool exhaustion would show a DHCPNAK, not APIPA. APIPA means no response at all.' },
+      { id: 'b', text: 'A DHCP Relay Agent (ip helper-address) is not configured on the VLAN 20 gateway', isCorrect: true, explanation: 'DHCP Discover is broadcast. Routers do not forward broadcasts between VLANs by default. A DHCP Relay Agent (ip helper-address in Cisco, RFC 3046) must be configured on the VLAN 20 L3 interface to forward requests to the DHCP server as unicast.' },
+      { id: 'c', text: 'The client NIC is faulty', isCorrect: false, explanation: 'APIPA (RFC 3927) is a fallback when DHCP fails, not a hardware fault indicator.' },
+      { id: 'd', text: 'The DHCP server is configured for VLAN 1 only', isCorrect: false, explanation: 'The server can serve multiple VLANs if the relay agent adds the correct giaddr so the server selects the right pool.' },
+    ],
+    explanation: '169.254.x.x (APIPA/RFC 3927) means the client got no DHCP response. Between VLANs/subnets, a DHCP Relay Agent must intercept the broadcast and forward it as unicast to the DHCP server (ip helper-address in Cisco IOS). The server uses the relay\'s giaddr to pick the right IP pool.',
+    rfcNote: 'RFC 2131 §3.1, RFC 3046 (Relay Agent), RFC 3927 (APIPA)',
+  },
+
+  // ── NAT / PAT ────────────────────────────────────────────────────────────────
+  {
+    id: 'nat-q1',
+    topicId: 'nat',
+    type: 'mcq',
+    difficulty: 'beginner',
+    question: 'What is the key difference between SNAT and DNAT?',
+    options: [
+      { id: 'a', text: 'SNAT is for UDP, DNAT is for TCP', isCorrect: false, explanation: 'Both SNAT and DNAT work with any protocol (TCP, UDP, ICMP).' },
+      { id: 'b', text: 'SNAT rewrites the source IP (outbound); DNAT rewrites the destination IP (inbound/port forwarding)', isCorrect: true, explanation: 'SNAT (Source NAT): applied at POSTROUTING — rewrites src IP of outgoing packets. DNAT (Destination NAT): applied at PREROUTING — rewrites dst IP of incoming packets for port forwarding.' },
+      { id: 'c', text: 'SNAT is stateful, DNAT is stateless', isCorrect: false, explanation: 'Both SNAT and DNAT are stateful — they require connection tracking (netfilter) to rewrite return packets correctly.' },
+      { id: 'd', text: 'SNAT requires a public IP; DNAT does not', isCorrect: false, explanation: 'Both typically involve a public IP. SNAT uses it as the new source; DNAT uses it as the original destination.' },
+    ],
+    explanation: 'SNAT rewrites source IP at POSTROUTING (for outbound traffic from private→public). DNAT rewrites destination IP at PREROUTING (for inbound port forwarding from public→private). PAT/Masquerade is a many-to-one SNAT that also rewrites the source port.',
+    rfcNote: 'RFC 3022 §4',
+  },
+  {
+    id: 'nat-q2',
+    topicId: 'nat',
+    type: 'scenario',
+    difficulty: 'intermediate',
+    question: 'You run a high-traffic server behind AWS NAT Gateway and observe connection failures with "address already in use" errors. The NAT Gateway has one Elastic IP. What is the root cause?',
+    context: 'EC2 instances in private subnets use a single NAT Gateway (one EIP) for outbound traffic to external APIs.',
+    options: [
+      { id: 'a', text: 'NAT Gateway CPU is overloaded', isCorrect: false, explanation: 'AWS NAT Gateway is fully managed and scales automatically. CPU is not a user-visible concern.' },
+      { id: 'b', text: 'PAT port exhaustion — 65,535 simultaneous port mappings per public IP are exceeded', isCorrect: true, explanation: 'PAT (Port Address Translation) maps each connection to a unique source port on the public IP. One public IP supports ~65,535 concurrent connections. High-throughput workloads can exhaust this. Fix: add multiple EIPs to the NAT Gateway.' },
+      { id: 'c', text: 'The target API is rate-limiting the NAT Gateway IP', isCorrect: false, explanation: 'Possible but unlikely to cause "address already in use" — that\'s a local socket error from PAT exhaustion.' },
+      { id: 'd', text: 'Security Group rules are blocking return traffic', isCorrect: false, explanation: 'Security Groups are stateful — return traffic is automatically allowed for established connections.' },
+    ],
+    explanation: 'PAT maps each outbound connection to (publicIP, uniquePort). Max ~65,535 ports per IP. Solution: assign multiple EIPs to the NAT Gateway so AWS distributes PAT across multiple public IPs.',
+  },
+
+  // ── UDP ──────────────────────────────────────────────────────────────────────
+  {
+    id: 'udp-q1',
+    topicId: 'udp',
+    type: 'mcq',
+    difficulty: 'beginner',
+    question: 'What is the total size of a UDP header?',
+    options: [
+      { id: 'a', text: '20 bytes', isCorrect: false, explanation: '20 bytes is the minimum TCP header size. UDP is much simpler.' },
+      { id: 'b', text: '8 bytes', isCorrect: true, explanation: 'RFC 768: UDP header = Source Port (2) + Destination Port (2) + Length (2) + Checksum (2) = 8 bytes fixed. No options, no extensions.' },
+      { id: 'c', text: '28 bytes', isCorrect: false, explanation: '28 bytes = 20-byte IP header + 8-byte UDP header. The UDP header alone is 8 bytes.' },
+      { id: 'd', text: '16 bytes', isCorrect: false, explanation: 'The UDP header has exactly 4 fields × 2 bytes each = 8 bytes total.' },
+    ],
+    explanation: 'RFC 768: The UDP header is a fixed 8 bytes: Source Port, Destination Port, Length, Checksum (each 2 bytes). This minimal overhead is why UDP is faster than TCP for latency-sensitive applications.',
+    rfcNote: 'RFC 768',
+  },
+  {
+    id: 'udp-q2',
+    topicId: 'udp',
+    type: 'mcq',
+    difficulty: 'intermediate',
+    question: 'Which protocol runs over UDP but implements its own reliability, ordering, and encryption — making it essentially "TCP+TLS in userspace"?',
+    options: [
+      { id: 'a', text: 'DTLS (Datagram TLS)', isCorrect: false, explanation: 'DTLS adds encryption to UDP but not full reliability/ordering like TCP.' },
+      { id: 'b', text: 'QUIC (RFC 9000)', isCorrect: true, explanation: 'QUIC (RFC 9000) runs over UDP and implements reliable delivery, stream multiplexing, ordering, and mandatory TLS 1.3 encryption entirely in userspace. HTTP/3 (RFC 9114) uses QUIC exclusively. Key benefit: eliminates TCP head-of-line blocking.' },
+      { id: 'c', text: 'SCTP', isCorrect: false, explanation: 'SCTP is a transport protocol like TCP/UDP, not built on top of UDP.' },
+      { id: 'd', text: 'WebSocket', isCorrect: false, explanation: 'WebSocket runs over TCP, not UDP.' },
+    ],
+    explanation: 'QUIC (RFC 9000) is a transport protocol implemented in userspace over UDP. It provides reliable, ordered, multiplexed streams with built-in TLS 1.3, 1-RTT or 0-RTT connection setup, and eliminates TCP head-of-line blocking. HTTP/3 (RFC 9114) uses QUIC.',
+    rfcNote: 'RFC 9000, RFC 9114',
+  },
+
+  // ── ICMP ─────────────────────────────────────────────────────────────────────
+  {
+    id: 'icmp-q1',
+    topicId: 'icmp',
+    type: 'mcq',
+    difficulty: 'beginner',
+    question: 'What ICMP message type does traceroute exploit to map network hops?',
+    options: [
+      { id: 'a', text: 'Type 0 — Echo Reply', isCorrect: false, explanation: 'Echo Reply (Type 0) is the response to ping. Traceroute uses a different mechanism.' },
+      { id: 'b', text: 'Type 3 — Destination Unreachable', isCorrect: false, explanation: 'Type 3 signals that a host/port/network is unreachable. Traceroute does use it at the final hop (Linux UDP mode), but the core mechanism relies on Type 11.' },
+      { id: 'c', text: 'Type 11 — Time Exceeded', isCorrect: true, explanation: 'Traceroute sends packets with TTL=1, 2, 3… Each router that decrements TTL to 0 sends back ICMP Type 11 Code 0 (Time Exceeded in Transit). This reveals each hop\'s IP. RFC 792.' },
+      { id: 'd', text: 'Type 8 — Echo Request', isCorrect: false, explanation: 'Echo Request is the outgoing ping. Traceroute sends it (Windows mode) but the replies that reveal hops are Type 11.' },
+    ],
+    explanation: 'Traceroute exploits TTL decrement behavior: routers MUST send ICMP Type 11 (Time Exceeded) when they discard a packet with TTL=0. By incrementing TTL from 1, each hop reveals itself. RFC 792 mandates this behavior.',
+    rfcNote: 'RFC 792',
+  },
+  {
+    id: 'icmp-q2',
+    topicId: 'icmp',
+    type: 'scenario',
+    difficulty: 'intermediate',
+    question: 'You block ALL ICMP in your AWS Security Group. Users report that large file uploads over VPN to your EC2 instance silently hang. What ICMP type must you allow to fix this?',
+    context: 'EC2 in private subnet behind ALB. VPN tunnel from office. Large HTTP POST requests hang indefinitely after TCP connect.',
+    options: [
+      { id: 'a', text: 'Type 8 (Echo Request) — to allow ping', isCorrect: false, explanation: 'Allowing ping would help with troubleshooting but doesn\'t fix the stalled uploads.' },
+      { id: 'b', text: 'Type 3 Code 4 (Fragmentation Needed / Don\'t Fragment set)', isCorrect: true, explanation: 'Path MTU Discovery (RFC 1191) relies on ICMP Type 3 Code 4. If a packet is too large and DF bit is set, the router drops it and sends this ICMP. If blocked, the sender never knows to reduce packet size — causing a "black hole" where connections appear established but data never flows.' },
+      { id: 'c', text: 'Type 0 (Echo Reply) — to allow ping responses', isCorrect: false, explanation: 'Echo Reply is for ping responses, not related to file upload stalls.' },
+      { id: 'd', text: 'Type 11 (Time Exceeded) — for traceroute', isCorrect: false, explanation: 'Blocking Type 11 breaks traceroute but does not cause upload stalls.' },
+    ],
+    explanation: 'Blocking ICMP Type 3 Code 4 (Fragmentation Needed) breaks PMTUD (Path MTU Discovery — RFC 1191). The sender uses DF=1 and expects ICMP feedback to reduce MTU. Without it, large packets are silently dropped, causing TCP connections to hang. Always allow ICMP Type 3 Code 4 inbound.',
+    rfcNote: 'RFC 1191 (PMTUD), RFC 792',
+  },
+
+  // ── HTTPS / TLS ───────────────────────────────────────────────────────────────
+  {
+    id: 'https-q1',
+    topicId: 'https',
+    type: 'mcq',
+    difficulty: 'intermediate',
+    question: 'How many round-trips (RTT) does TLS 1.3 require to establish a new connection, compared to TLS 1.2?',
+    options: [
+      { id: 'a', text: 'TLS 1.3: 2 RTT, TLS 1.2: 3 RTT', isCorrect: false, explanation: 'TLS 1.2 needs 2 RTT (not 3), and TLS 1.3 is even faster.' },
+      { id: 'b', text: 'TLS 1.3: 1 RTT (or 0-RTT for resumption), TLS 1.2: 2 RTT', isCorrect: true, explanation: 'RFC 8446: TLS 1.3 completes in 1 RTT (ClientHello + ServerHello/Cert/Finished in one round-trip), and supports 0-RTT for session resumption. TLS 1.2 needs 2 full RTTs before application data can flow.' },
+      { id: 'c', text: 'Both require 2 RTT', isCorrect: false, explanation: 'TLS 1.3 was specifically designed to reduce this to 1 RTT, a key improvement over TLS 1.2.' },
+      { id: 'd', text: 'TLS 1.3: 0 RTT always, TLS 1.2: 1 RTT', isCorrect: false, explanation: '0-RTT in TLS 1.3 is only for session resumption and has replay attack risks (RFC 8470). New connections always need 1 RTT.' },
+    ],
+    explanation: 'TLS 1.3 (RFC 8446) reduced the handshake from 2 RTT (TLS 1.2) to 1 RTT for new connections. For resumed sessions, 0-RTT early data is possible but carries replay attack risks. This improvement is significant for latency-sensitive applications.',
+    rfcNote: 'RFC 8446 §2.2',
+  },
+  {
+    id: 'https-q2',
+    topicId: 'https',
+    type: 'mcq',
+    difficulty: 'advanced',
+    question: 'TLS 1.3 mandates Perfect Forward Secrecy (PFS). What does this guarantee?',
+    options: [
+      { id: 'a', text: 'Encrypted traffic cannot be intercepted in transit', isCorrect: false, explanation: 'Encryption in transit is provided by TLS generally, not specifically by PFS.' },
+      { id: 'b', text: 'Compromising the server\'s private key does NOT allow decryption of past recorded sessions', isCorrect: true, explanation: 'PFS (via ECDHE): each session uses ephemeral key pairs. The session key is derived from ECDHE and discarded after use. Even if an attacker later obtains the server\'s long-term private key, they cannot decrypt previously captured sessions because the ephemeral keys no longer exist.' },
+      { id: 'c', text: 'The TLS certificate cannot be forged', isCorrect: false, explanation: 'Certificate forgery prevention is handled by the CA trust chain, not PFS.' },
+      { id: 'd', text: 'Each packet is individually encrypted', isCorrect: false, explanation: 'Packet-level encryption is standard TLS. PFS specifically refers to the impossibility of retroactive decryption.' },
+    ],
+    explanation: 'Perfect Forward Secrecy (PFS) via ECDHE (Elliptic Curve Diffie-Hellman Ephemeral) means session keys are ephemeral — generated fresh for each session and deleted afterward. Compromising the server\'s private key only enables impersonating the server for future connections, not decrypting past sessions. TLS 1.3 makes ECDHE mandatory.',
+    rfcNote: 'RFC 8446 §1.1',
+  },
 ];
 
 export default quizBank;
