@@ -12,24 +12,15 @@ import NATPATPage from './pages/topics/NATPATPage';
 import UDPPage from './pages/topics/UDPPage';
 import ICMPPage from './pages/topics/ICMPPage';
 import HTTPSPage from './pages/topics/HTTPSPage';
-
-function ComingSoon({ title }: { title: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 animate-in">
-      <div className="text-6xl">🚧</div>
-      <h2 className="text-2xl font-bold text-white">{title}</h2>
-      <p className="text-slate-400 text-sm">This topic is coming in Phase 2. Stay tuned!</p>
-    </div>
-  );
-}
-
-function LoadingFallback() {
-  return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="w-8 h-8 border-2 border-electric-500/30 border-t-electric-500 rounded-full animate-spin" />
-    </div>
-  );
-}
+import HTTPPage from './pages/topics/HTTPPage';
+import SSHPage from './pages/topics/SSHPage';
+import TCPIPModelPage from './pages/topics/TCPIPModelPage';
+import RoutingPage from './pages/topics/RoutingPage';
+import FirewallsPage from './pages/topics/FirewallsPage';
+import LoadBalancingPage from './pages/topics/LoadBalancingPage';
+import VPCPage from './pages/topics/VPCPage';
+import DockerNetworkingPage from './pages/topics/DockerNetworkingPage';
+import KubernetesNetworkingPage from './pages/topics/KubernetesNetworkingPage';
 
 export default function App() {
   return (
@@ -38,7 +29,7 @@ export default function App() {
         <Route element={<Layout />}>
           <Route index element={<HomePage />} />
 
-          {/* Phase 1 — Live topics */}
+          {/* Phase 1 Topics */}
           <Route path="/topic/osi-model"     element={<OSIModelPage />} />
           <Route path="/topic/dns"           element={<DNSPage />} />
           <Route path="/topic/tcp"           element={<TCPPage />} />
@@ -46,28 +37,26 @@ export default function App() {
           <Route path="/topic/ip-addressing" element={<SubnettingPage />} />
           <Route path="/topic/subnetting"    element={<Navigate to="/topic/ip-addressing" replace />} />
 
-          {/* Phase 2 — Live */}
+          {/* Phase 2 Topics */}
           <Route path="/topic/dhcp"          element={<DHCPPage />} />
           <Route path="/topic/nat"           element={<NATPATPage />} />
           <Route path="/topic/udp"           element={<UDPPage />} />
           <Route path="/topic/icmp"          element={<ICMPPage />} />
           <Route path="/topic/https"         element={<HTTPSPage />} />
 
-          {/* Still coming */}
-          <Route path="/topic/tcpip-model"   element={<ComingSoon title="TCP/IP Model" />} />
-          <Route path="/topic/ethernet"      element={<ComingSoon title="Ethernet & Frames" />} />
-          <Route path="/topic/mac-address"   element={<ComingSoon title="MAC Addresses" />} />
-          <Route path="/topic/routing"       element={<ComingSoon title="Routing" />} />
-          <Route path="/topic/http"          element={<ComingSoon title="HTTP / REST" />} />
-          <Route path="/topic/ssh"           element={<ComingSoon title="SSH" />} />
-          <Route path="/topic/firewalls"     element={<ComingSoon title="Firewalls & iptables" />} />
-          <Route path="/topic/load-balancing" element={<ComingSoon title="Load Balancing" />} />
-          <Route path="/topic/vpn"           element={<ComingSoon title="VPN" />} />
-          <Route path="/topic/aws-vpc"       element={<ComingSoon title="AWS VPC" />} />
-          <Route path="/topic/docker"        element={<ComingSoon title="Docker Networking" />} />
-          <Route path="/topic/k8s-networking" element={<ComingSoon title="Kubernetes Networking" />} />
+          {/* Phase 3 Topics */}
+          <Route path="/topic/http font"     element={<HTTPPage />} />
+          <Route path="/topic/http"          element={<HTTPPage />} />
+          <Route path="/topic/ssh"           element={<SSHPage />} />
+          <Route path="/topic/tcpip-model"   element={<TCPIPModelPage />} />
+          <Route path="/topic/routing"       element={<RoutingPage />} />
+          <Route path="/topic/firewalls"     element={<FirewallsPage />} />
+          <Route path="/topic/load-balancing" element={<LoadBalancingPage />} />
+          <Route path="/topic/vpc"           element={<VPCPage />} />
+          <Route path="/topic/docker-networking" element={<DockerNetworkingPage />} />
+          <Route path="/topic/kubernetes-networking" element={<KubernetesNetworkingPage />} />
 
-          {/* 404 */}
+          {/* 404 Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

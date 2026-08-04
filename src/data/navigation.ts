@@ -30,7 +30,7 @@ export const NAV_SECTIONS: NavSection[] = [
     items: [
       { id: 'ip-addressing', title: 'IP Addressing & CIDR', path: '/topic/ip-addressing', topicId: 'ip-addressing' },
       { id: 'subnetting',    title: 'Subnetting',           path: '/topic/subnetting',    topicId: 'subnetting' },
-      { id: 'routing',       title: 'Routing',              path: '/topic/routing',       topicId: 'routing', badge: 'Soon' },
+      { id: 'routing',       title: 'Routing',              path: '/topic/routing',       topicId: 'routing' },
       { id: 'nat',           title: 'NAT / PAT',            path: '/topic/nat',           topicId: 'nat' },
     ],
   },
@@ -53,9 +53,9 @@ export const NAV_SECTIONS: NavSection[] = [
     items: [
       { id: 'dns',   title: 'DNS',         path: '/topic/dns',   topicId: 'dns' },
       { id: 'dhcp',  title: 'DHCP',        path: '/topic/dhcp',  topicId: 'dhcp' },
-      { id: 'http',  title: 'HTTP / REST', path: '/topic/http',  topicId: 'http',  badge: 'Soon' },
+      { id: 'http',  title: 'HTTP / REST', path: '/topic/http',  topicId: 'http' },
       { id: 'https', title: 'HTTPS & TLS', path: '/topic/https', topicId: 'https' },
-      { id: 'ssh',   title: 'SSH',         path: '/topic/ssh',   topicId: 'ssh',   badge: 'Soon' },
+      { id: 'ssh',   title: 'SSH',         path: '/topic/ssh',   topicId: 'ssh' },
     ],
   },
   {
@@ -64,9 +64,8 @@ export const NAV_SECTIONS: NavSection[] = [
     icon: 'Server',
     color: '#06b6d4',
     items: [
-      { id: 'firewalls',      title: 'Firewalls & iptables', path: '/topic/firewalls',      badge: 'Soon' },
-      { id: 'load-balancing', title: 'Load Balancing',       path: '/topic/load-balancing', badge: 'Soon' },
-      { id: 'vpn',            title: 'VPN',                  path: '/topic/vpn',            badge: 'Soon' },
+      { id: 'firewalls',      title: 'Firewalls & iptables', path: '/topic/firewalls',      topicId: 'firewalls' },
+      { id: 'load-balancing', title: 'Load Balancing',       path: '/topic/load-balancing', topicId: 'load-balancing' },
     ],
   },
   {
@@ -75,9 +74,9 @@ export const NAV_SECTIONS: NavSection[] = [
     icon: 'Cloud',
     color: '#f43f5e',
     items: [
-      { id: 'aws-vpc', title: 'AWS VPC',     path: '/topic/aws-vpc', badge: 'Soon' },
-      { id: 'docker',  title: 'Docker Nets', path: '/topic/docker',  badge: 'Soon' },
-      { id: 'k8s-net', title: 'Kubernetes',  path: '/topic/k8s-networking', badge: 'Soon' },
+      { id: 'aws-vpc', title: 'AWS VPC',     path: '/topic/vpc',                topicId: 'vpc' },
+      { id: 'docker',  title: 'Docker Nets', path: '/topic/docker-networking',  topicId: 'docker-networking' },
+      { id: 'k8s-net', title: 'Kubernetes',  path: '/topic/kubernetes-networking', topicId: 'kubernetes-networking' },
     ],
   },
 ];

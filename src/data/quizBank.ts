@@ -356,6 +356,168 @@ export const quizBank: QuizQuestion[] = [
     explanation: 'Perfect Forward Secrecy (PFS) via ECDHE (Elliptic Curve Diffie-Hellman Ephemeral) means session keys are ephemeral — generated fresh for each session and deleted afterward. Compromising the server\'s private key only enables impersonating the server for future connections, not decrypting past sessions. TLS 1.3 makes ECDHE mandatory.',
     rfcNote: 'RFC 8446 §1.1',
   },
+
+  // ── HTTP ─────────────────────────────────────────────────────────────────────
+  {
+    id: 'http-q1',
+    topicId: 'http',
+    type: 'mcq',
+    difficulty: 'beginner',
+    question: 'How does HTTP/3 (RFC 9114) eliminate TCP head-of-line (HOL) blocking?',
+    options: [
+      { id: 'a', text: 'By compression with HPACK', isCorrect: false, explanation: 'HPACK compresses headers in HTTP/2, but does not prevent transport packet loss blocking.' },
+      { id: 'b', text: 'By replacing TCP with QUIC over UDP', isCorrect: true, explanation: 'RFC 9114: HTTP/3 runs over QUIC (UDP). QUIC streams are independent — if a packet drops on Stream A, Stream B continues unblocked.' },
+      { id: 'c', text: 'By using multiple TCP sockets', isCorrect: false, explanation: 'HTTP/1.1 used multiple TCP sockets, but that was inefficient and memory intensive.' },
+      { id: 'd', text: 'By enforcing mandatory TLS 1.2', isCorrect: false, explanation: 'TLS 1.2 is a security protocol and does not resolve transport-level HOL blocking.' },
+    ],
+    explanation: 'HTTP/3 uses QUIC over UDP. Because QUIC handles stream multiplexing directly in UDP userspace, packet loss on one stream does not pause other streams.',
+    rfcNote: 'RFC 9114',
+  },
+  {
+    id: 'http-q2',
+    topicId: 'http',
+    type: 'scenario',
+    difficulty: 'intermediate',
+    question: 'An Nginx reverse proxy returns status code 502 Bad Gateway to clients. What does this indicate?',
+    options: [
+      { id: 'a', text: 'The client request URL is invalid', isCorrect: false, explanation: 'Invalid client requests return 400 Bad Request or 404 Not Found.' },
+      { id: 'b', text: 'The reverse proxy received an invalid or failed response from the upstream application server', isCorrect: true, explanation: '502 Bad Gateway means Nginx (acting as a proxy/gateway) failed to communicate or received an invalid response from the upstream app (e.g. Node.js/Gunicorn crashed or refused connection).' },
+      { id: 'c', text: 'The server database timed out', isCorrect: false, explanation: 'Database timeout usually yields 504 Gateway Timeout or 500 Internal Server Error.' },
+      { id: 'd', text: 'The client is rate-limited', isCorrect: false, explanation: 'Rate limiting yields 429 Too Many Requests.' },
+    ],
+    explanation: '502 Bad Gateway occurs when an intermediate proxy server receives an invalid or refused response from the backend application socket.',
+  },
+
+  // ── SSH ──────────────────────────────────────────────────────────────────────
+  {
+    id: 'ssh-q1',
+    topicId: 'ssh',
+    type: 'mcq',
+    difficulty: 'intermediate',
+    question: 'Which SSH option creates a local SOCKS5 proxy server that routes all client traffic dynamically through an SSH tunnel?',
+    options: [
+      { id: 'a', text: '-L (Local Port Forwarding)', isCorrect: false, explanation: '-L binds a specific single local port to a fixed target.' },
+      { id: 'b', text: '-R (Remote Port Forwarding)', isCorrect: false, explanation: '-R binds a port on the remote server back to a local port.' },
+      { id: 'c', text: '-D (Dynamic Port Forwarding)', isCorrect: true, explanation: 'ssh -D 1080 user@host creates a local SOCKS5 proxy at port 1080. Browsers can send any traffic through this proxy.' },
+      { id: 'd', text: '-N (No Command Execution)', isCorrect: false, explanation: '-N prevents remote shell execution, used alongside forwarding options.' },
+    ],
+    explanation: 'RFC 4254: Dynamic Port Forwarding (`ssh -D`) turns the SSH connection into a full SOCKS5 proxy server.',
+    rfcNote: 'RFC 4254',
+  },
+
+  // ── TCP/IP Model ─────────────────────────────────────────────────────────────
+  {
+    id: 'tcpip-q1',
+    topicId: 'tcpip-model',
+    type: 'mcq',
+    difficulty: 'beginner',
+    question: 'Which OSI model layers are combined into the single "Application Layer" in the 4-layer TCP/IP Model (RFC 1122)?',
+    options: [
+      { id: 'a', text: 'Layers 1, 2, and 3', isCorrect: false, explanation: 'These form Network Access and Internet layers.' },
+      { id: 'b', text: 'Layers 5 (Session), 6 (Presentation), and 7 (Application)', isCorrect: true, explanation: 'RFC 1122 simplifies OSI layers 5, 6, and 7 into a single unified Application Layer.' },
+      { id: 'c', text: 'Layers 3, 4, and 5', isCorrect: false, explanation: 'Layer 3 is Internet and Layer 4 is Transport.' },
+      { id: 'd', text: 'Layers 4 and 7', isCorrect: false, explanation: 'Layer 4 is Transport in both models.' },
+    ],
+    explanation: 'The TCP/IP model combines OSI Application (L7), Presentation (L6), and Session (L5) into its Application layer.',
+    rfcNote: 'RFC 1122 §1.1',
+  },
+
+  // ── Routing ──────────────────────────────────────────────────────────────────
+  {
+    id: 'routing-q1',
+    topicId: 'routing',
+    type: 'mcq',
+    difficulty: 'intermediate',
+    question: 'When an IP destination matches multiple routes in a router\'s FIB, which route is selected?',
+    options: [
+      { id: 'a', text: 'The route with the lowest metric', isCorrect: false, explanation: 'Metric is only used as a tie-breaker when prefix lengths are identical.' },
+      { id: 'b', text: 'The route with the longest CIDR prefix mask (Longest Prefix Match)', isCorrect: true, explanation: 'RFC 1812: Routers ALWAYS select the route with the most specific (longest) subnet mask. For example, /28 is selected over /24.' },
+      { id: 'c', text: 'The route added most recently', isCorrect: false, explanation: 'Time added does not determine route selection.' },
+      { id: 'd', text: 'The default route (0.0.0.0/0)', isCorrect: false, explanation: '0.0.0.0/0 is the fallback of last resort (/0 is the shortest prefix).' },
+    ],
+    explanation: 'Longest Prefix Match (LPM) dictates that the route with the highest prefix length (/32 > /28 > /24 > /16 > /0) is chosen. RFC 1812.',
+    rfcNote: 'RFC 1812 §5.2.4',
+  },
+
+  // ── Firewalls ────────────────────────────────────────────────────────────────
+  {
+    id: 'firewalls-q1',
+    topicId: 'firewalls',
+    type: 'mcq',
+    difficulty: 'intermediate',
+    question: 'Which Netfilter chain in Linux handles packets BEFORE any routing decision is made (used for DNAT)?',
+    options: [
+      { id: 'a', text: 'POSTROUTING', isCorrect: false, explanation: 'POSTROUTING handles packets AFTER routing (used for SNAT).' },
+      { id: 'b', text: 'PREROUTING', isCorrect: true, explanation: 'PREROUTING hook intercepts packets as soon as they enter the NIC before the IP routing table decision is made, allowing destination IP/port rewriting.' },
+      { id: 'c', text: 'INPUT', isCorrect: false, explanation: 'INPUT is for packets destined for local sockets.' },
+      { id: 'd', text: 'FORWARD', isCorrect: false, explanation: 'FORWARD is for routed transit packets.' },
+    ],
+    explanation: 'PREROUTING runs before routing lookup. It is used for Destination NAT (DNAT / port forwarding).',
+  },
+
+  // ── Load Balancing ───────────────────────────────────────────────────────────
+  {
+    id: 'load-balancing-q1',
+    topicId: 'load-balancing',
+    type: 'mcq',
+    difficulty: 'beginner',
+    question: 'What is a major advantage of L7 Load Balancing over L4 Load Balancing?',
+    options: [
+      { id: 'a', text: 'L7 load balancing is faster and uses less CPU', isCorrect: false, explanation: 'L4 load balancing is faster because it does not inspect HTTP payloads.' },
+      { id: 'b', text: 'L7 load balancing can route based on HTTP headers, cookie session stickiness, and URL paths', isCorrect: true, explanation: 'L7 load balancers (like ALB / Nginx) inspect the HTTP layer, allowing path routing (/api vs /static) and TLS termination.' },
+      { id: 'c', text: 'L7 load balancing works without IP addresses', isCorrect: false, explanation: 'All network routing requires IP addresses.' },
+      { id: 'd', text: 'L7 load balancing does not support HTTPS', isCorrect: false, explanation: 'L7 load balancers frequently terminate HTTPS certificates.' },
+    ],
+    explanation: 'L7 (Application Layer) load balancing inspects HTTP/HTTPS data to perform smart routing based on paths, headers, and cookies.',
+  },
+
+  // ── AWS VPC ──────────────────────────────────────────────────────────────────
+  {
+    id: 'vpc-q1',
+    topicId: 'vpc',
+    type: 'mcq',
+    difficulty: 'intermediate',
+    question: 'What is the primary operational difference between an AWS Security Group and a Network ACL (NACL)?',
+    options: [
+      { id: 'a', text: 'Security Groups are stateless; NACLs are stateful', isCorrect: false, explanation: 'It is the opposite: Security Groups are stateful; NACLs are stateless.' },
+      { id: 'b', text: 'Security Groups are stateful (ENI level); NACLs are stateless (Subnet level)', isCorrect: true, explanation: 'Security Groups track connection state (allowing return traffic automatically) at instance ENIs. NACLs evaluate rules in order per packet at subnet boundaries.' },
+      { id: 'c', text: 'Security Groups support DENY rules; NACLs only ALLOW', isCorrect: false, explanation: 'Security Groups only support ALLOW. NACLs support ALLOW and DENY.' },
+      { id: 'd', text: 'NACLs apply to IAM users; Security Groups apply to VMs', isCorrect: false, explanation: 'Both are network security controls, not IAM controls.' },
+    ],
+    explanation: 'Security Groups are stateful firewalls attached to ENIs. NACLs are stateless firewalls attached to Subnets.',
+  },
+
+  // ── Docker Networking ────────────────────────────────────────────────────────
+  {
+    id: 'docker-networking-q1',
+    topicId: 'docker-networking',
+    type: 'mcq',
+    difficulty: 'intermediate',
+    question: 'What Linux kernel mechanism provides network interface isolation for Docker containers on a single host?',
+    options: [
+      { id: 'a', text: 'Control Groups (cgroups)', isCorrect: false, explanation: 'cgroups manage CPU/Memory resource limits.' },
+      { id: 'b', text: 'Network Namespaces (netns) connected via veth pairs', isCorrect: true, explanation: 'Linux `netns` gives each container its own isolated network stack (IP, interfaces, routing table), linked to the host bridge via a virtual ethernet (`veth`) pair.' },
+      { id: 'c', text: 'seccomp profiles', isCorrect: false, explanation: 'seccomp restricts system calls.' },
+      { id: 'd', text: 'CHROOT system calls', isCorrect: false, explanation: 'chroot isolates filesystem root directories.' },
+    ],
+    explanation: 'Linux Network Namespaces (`netns`) isolate network interfaces, IP addresses, and routing tables per container.',
+  },
+
+  // ── Kubernetes Networking ────────────────────────────────────────────────────
+  {
+    id: 'k8s-q1',
+    topicId: 'kubernetes-networking',
+    type: 'mcq',
+    difficulty: 'advanced',
+    question: 'Why does the Cilium CNI plugin outperform traditional kube-proxy iptables implementations in large Kubernetes clusters?',
+    options: [
+      { id: 'a', text: 'Cilium replaces Docker with podman', isCorrect: false, explanation: 'Container runtime is independent of CNI.' },
+      { id: 'b', text: 'Cilium uses eBPF in the Linux kernel to bypass sequential O(N) iptables rules with O(1) hash maps', isCorrect: true, explanation: 'Traditional kube-proxy creates linear iptables rules for every service endpoint (O(N) search complexity). Cilium uses eBPF programs attached to kernel socket hooks, replacing iptables with fast BPF O(1) map lookups.' },
+      { id: 'c', text: 'Cilium disables network security policies', isCorrect: false, explanation: 'Cilium provides richer L3/L4/L7 eBPF security policies.' },
+      { id: 'd', text: 'Cilium requires external hardware routers', isCorrect: false, explanation: 'eBPF runs inside the standard Linux kernel.' },
+    ],
+    explanation: 'Cilium uses eBPF kernel technology to replace sequential iptables rule processing with O(1) BPF map lookups, drastically reducing packet latency in large clusters.',
+  },
 ];
 
 export default quizBank;
