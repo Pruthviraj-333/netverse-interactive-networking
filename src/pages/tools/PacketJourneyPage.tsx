@@ -270,41 +270,43 @@ export default function PacketJourneyPage() {
   const currentStage = stages[animStep] || stages[0];
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8 animate-in">
+    <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-8 animate-in">
       {/* Title Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-            <Globe size={20} className="text-blue-400" />
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
+              <Globe size={20} className="text-blue-400" />
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
+                Device-to-Device Internet Packet Journey Visualizer
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">Visualizing Physical & Virtual Device Hop Transfers across Local LAN, Routers, ISP, and Cloud Datacenters</p>
+            </div>
           </div>
-          <div>
-            <h1 className="bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
-              Device-to-Device Internet Packet Journey Visualizer
-            </h1>
-            <p className="text-sm text-slate-500 mt-0.5">Visualizing Physical & Virtual Device Hop Transfers across Local LAN, Routers, ISP, and Cloud Datacenters</p>
-          </div>
-          <span className="ml-auto badge-blue">Interactive Topology</span>
+          <span className="badge-blue shrink-0">Interactive Topology</span>
         </div>
       </div>
 
       {/* Endpoint Customization Bar */}
-      <div className="glass rounded-2xl p-5 mb-6 space-y-4 border border-white/[0.08]">
-        <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
+      <div className="glass rounded-2xl p-4 sm:p-5 mb-6 space-y-4 border border-white/[0.08]">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.06] pb-3">
           <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-2">
             <Sliders size={14} className="text-blue-400" />
-            <span>Customize Packet Source & Destination Endpoints</span>
+            <span>Customize Endpoints</span>
           </h3>
           {/* Quick Presets */}
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] text-slate-500 font-mono">Quick Presets:</span>
-            <button onClick={() => applyPreset('web')} className="px-2.5 py-1 rounded glass text-[10px] text-blue-400 hover:bg-blue-500/20 border border-blue-500/30">
-              🌐 Web (HTTPS:443)
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <span className="text-[10px] text-slate-500 font-mono">Presets:</span>
+            <button onClick={() => applyPreset('web')} className="px-2 py-1 rounded glass text-[10px] text-blue-400 hover:bg-blue-500/20 border border-blue-500/30">
+              🌐 Web (:443)
             </button>
-            <button onClick={() => applyPreset('db')} className="px-2.5 py-1 rounded glass text-[10px] text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30">
-              ☁️ Cloud DB (Postgres:5432)
+            <button onClick={() => applyPreset('db')} className="px-2 py-1 rounded glass text-[10px] text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30">
+              ☁️ Cloud DB (:5432)
             </button>
-            <button onClick={() => applyPreset('ssh')} className="px-2.5 py-1 rounded glass text-[10px] text-amber-400 hover:bg-amber-500/20 border border-amber-500/30">
-              🔒 SSH Admin (:22)
+            <button onClick={() => applyPreset('ssh')} className="px-2 py-1 rounded glass text-[10px] text-amber-400 hover:bg-amber-500/20 border border-amber-500/30">
+              🔒 SSH (:22)
             </button>
           </div>
         </div>

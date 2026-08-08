@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, Send, Trash2, ExternalLink, AlertCircle, Zap, Cpu, Copy, Check } from 'lucide-react';
+import { Bot, Send, Trash2, ExternalLink, AlertCircle, Zap, Cpu, Copy, Check, X } from 'lucide-react';
 import { streamGroqAnswer, GROQ_AVAILABLE } from '../../utils/groq';
-import { useTutorStore } from '../../stores';
+import { useTutorStore, useSettings } from '../../stores';
 import { cn, uid } from '../../utils/helpers';
 import type { TutorMessage } from '../../types';
 
@@ -248,6 +248,7 @@ const SUGGESTED = [
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function AITutor() {
   const { messages, isTyping, addMessage, setTyping, clearMessages } = useTutorStore();
+  const { setTutorOpen } = useSettings();
   const [input, setInput] = useState('');
   const [streamingId, setStreamingId] = useState<string | null>(null);
   const [streamingContent, setStreamingContent] = useState('');
@@ -337,7 +338,7 @@ export default function AITutor() {
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: 320, opacity: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="w-80 h-full border-l border-white/[0.06] flex flex-col shrink-0"
+      className="w-80 max-md:w-[85vw] max-md:max-w-sm h-full border-l border-white/[0.06] flex flex-col shrink-0 max-md:fixed max-md:inset-y-0 max-md:right-0 max-md:z-50 shadow-2xl"
       style={{ background: 'rgba(10, 14, 35, 0.98)' }}
     >
       {/* Header */}
@@ -360,9 +361,14 @@ export default function AITutor() {
             </div>
           </div>
         </div>
-        <button onClick={clearMessages} className="btn-icon" title="Clear chat">
-          <Trash2 size={14} />
-        </button>
+        <div className="flex items-center gap-1">
+          <button onClick={clearMessages} className="btn-icon" title="Clear chat">
+            <Trash2 size={14} />
+          </button>
+          <button onClick={() => setTutorOpen(false)} className="btn-icon text-slate-400 hover:text-white" title="Close AI Tutor">
+            <X size={16} />
+          </button>
+        </div>
       </div>
 
       {/* Messages */}

@@ -39,13 +39,13 @@ export default function Header({ onSearchOpen }: HeaderProps) {
       {/* Center: Search bar */}
       <button
         onClick={onSearchOpen}
-        className="flex items-center gap-2.5 px-3 py-1.5 glass rounded-lg text-slate-400 hover:text-white text-sm hover:bg-white/[0.07] transition-all max-w-xs w-full mx-4"
+        className="flex items-center gap-2 px-2 sm:px-3 py-1.5 glass rounded-lg text-slate-400 hover:text-white text-xs sm:text-sm hover:bg-white/[0.07] transition-all max-w-xs w-full mx-2 sm:mx-4 overflow-hidden"
         aria-label="Open search"
         title="Search (Ctrl+K)"
       >
-        <Search size={14} />
-        <span className="flex-1 text-left">Search topics, RFCs, ports…</span>
-        <kbd className="text-[10px] border border-slate-700 rounded px-1.5 py-0.5 font-mono text-slate-600 hidden sm:block">
+        <Search size={14} className="shrink-0" />
+        <span className="flex-1 text-left truncate text-xs sm:text-sm">Search topics, RFCs…</span>
+        <kbd className="text-[10px] border border-slate-700 rounded px-1.5 py-0.5 font-mono text-slate-600 hidden sm:block shrink-0">
           Ctrl K
         </kbd>
       </button>

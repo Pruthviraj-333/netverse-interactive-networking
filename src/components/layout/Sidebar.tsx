@@ -141,8 +141,8 @@ export default function Sidebar({ collapsed }: SidebarProps) {
     <motion.aside
       animate={{ width: collapsed ? 0 : 240 }}
       transition={{ duration: 0.25, ease: 'easeInOut' }}
-      className="h-full overflow-hidden shrink-0 border-r border-white/[0.06] flex flex-col"
-      style={{ background: 'rgba(8, 12, 35, 0.95)' }}
+      className="h-full overflow-hidden shrink-0 border-r border-white/[0.06] flex flex-col max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-50 shadow-2xl"
+      style={{ background: 'rgba(8, 12, 35, 0.98)' }}
     >
       <div className="flex-1 overflow-y-auto px-2 pt-2 pb-20">
         {/* Logo area */}
