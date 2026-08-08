@@ -121,25 +121,27 @@ export default function DNSResolverPage() {
   const currentStep = steps[activeStep] || steps[0];
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8 animate-in">
+    <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-8 animate-in">
       {/* Title Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-            <Globe size={20} className="text-purple-400" />
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
+              <Globe size={20} className="text-purple-400" />
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Recursive DNS Resolution Visualizer</h1>
+              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">Interactive Root-to-Authoritative Lookup Simulator</p>
+            </div>
           </div>
-          <div>
-            <h1 className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Recursive DNS Resolution Visualizer</h1>
-            <p className="text-sm text-slate-500 mt-0.5">Interactive Root-to-Authoritative Lookup Simulator</p>
-          </div>
-          <span className="ml-auto badge-purple">Interactive Tool</span>
+          <span className="badge-purple shrink-0">Interactive Tool</span>
         </div>
       </div>
 
       {/* Control Bar */}
-      <div className="glass rounded-xl p-5 mb-6 space-y-4">
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-          <div className="flex items-center gap-3 w-full md:w-auto">
+      <div className="glass rounded-xl p-4 sm:p-5 mb-6 space-y-4">
+        <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
             <div className="relative flex-1 md:w-80">
               <Search size={16} className="absolute left-3 top-3 text-slate-500" />
               <input
@@ -147,15 +149,15 @@ export default function DNSResolverPage() {
                 value={domainInput}
                 onChange={(e) => setDomainInput(e.target.value)}
                 placeholder="Enter domain e.g. api.github.com"
-                className="w-full glass rounded-lg pl-9 pr-4 py-2 text-sm text-white font-mono outline-none border border-white/[0.1] focus:border-purple-500"
+                className="w-full glass rounded-lg pl-9 pr-4 py-2 text-xs sm:text-sm text-white font-mono outline-none border border-white/[0.1] focus:border-purple-500"
               />
             </div>
-            <div className="flex gap-1 glass p-1 rounded-lg">
+            <div className="flex flex-wrap gap-1 glass p-1 rounded-lg justify-center">
               {(['A', 'AAAA', 'CNAME', 'MX', 'TXT'] as const).map((t) => (
                 <button
                   key={t}
                   onClick={() => setRecordType(t)}
-                  className={`px-2.5 py-1 text-xs font-mono rounded ${recordType === t ? 'bg-purple-500 text-white font-bold' : 'text-slate-400 hover:text-white'}`}
+                  className={`px-2 py-1 text-xs font-mono rounded ${recordType === t ? 'bg-purple-500 text-white font-bold' : 'text-slate-400 hover:text-white'}`}
                 >
                   {t}
                 </button>
@@ -163,13 +165,13 @@ export default function DNSResolverPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 justify-end">
             <button
               onClick={() => {
                 setActiveStep(0);
                 setIsSimulating(true);
               }}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold shadow-lg shadow-purple-500/20 hover:brightness-110 transition-all"
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-3.5 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold shadow-lg shadow-purple-500/20 hover:brightness-110 transition-all"
             >
               {isSimulating ? <Pause size={14} /> : <Play size={14} />}
               <span>{isSimulating ? 'Pause Resolution' : 'Simulate DNS Lookup'}</span>
@@ -188,8 +190,8 @@ export default function DNSResolverPage() {
       </div>
 
       {/* Step Progress Visualizer */}
-      <div className="canvas-bg rounded-2xl border border-white/[0.06] p-6 mb-6">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 mb-6">
+      <div className="canvas-bg rounded-2xl border border-white/[0.06] p-4 sm:p-6 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 mb-6">
           {steps.map((s, idx) => {
             const isCurrent = idx === activeStep;
             const isPast = idx < activeStep;
@@ -197,16 +199,16 @@ export default function DNSResolverPage() {
               <button
                 key={s.id}
                 onClick={() => { setIsSimulating(false); setActiveStep(idx); }}
-                className="flex flex-col items-center p-3 rounded-xl border text-center transition-all"
+                className="flex flex-col items-center p-2.5 sm:p-3 rounded-xl border text-center transition-all min-h-[72px] justify-center"
                 style={{
                   borderColor: isCurrent ? s.color : isPast ? `${s.color}40` : 'rgba(255,255,255,0.06)',
                   backgroundColor: isCurrent ? `${s.color}15` : 'transparent',
                 }}
               >
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mb-1" style={{ backgroundColor: `${s.color}20`, color: s.color }}>
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold mb-1 shrink-0" style={{ backgroundColor: `${s.color}20`, color: s.color }}>
                   {idx + 1}
                 </div>
-                <span className="text-[10px] font-semibold text-white truncate max-w-full">{s.stage.split('. ')[1]}</span>
+                <span className="text-[10px] sm:text-xs font-semibold text-white leading-tight text-center line-clamp-2">{s.stage.split('. ')[1]}</span>
               </button>
             );
           })}

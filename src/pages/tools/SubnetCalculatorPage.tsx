@@ -53,39 +53,41 @@ export default function SubnetCalculatorPage() {
   ] : [];
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 animate-in">
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-            <Calculator size={20} className="text-blue-400" />
+    <div className="max-w-4xl mx-auto px-3 sm:px-6 py-4 sm:py-8 animate-in">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
+              <Calculator size={20} className="text-blue-400" />
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Subnet Calculator
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">CIDR · RFC 4632 · Visual Breakdown</p>
+            </div>
           </div>
-          <div>
-            <h1 className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              Subnet Calculator
-            </h1>
-            <p className="text-sm text-slate-500 mt-0.5">CIDR · RFC 4632 · Visual Breakdown</p>
-          </div>
-          <span className="ml-auto badge-blue">Tool</span>
+          <span className="badge-blue shrink-0">Tool</span>
         </div>
-        <div className="glass rounded-xl p-5">
-          <p className="text-sm text-slate-300 leading-relaxed">
+        <div className="glass rounded-xl p-4 sm:p-5">
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
             Enter any IPv4 CIDR notation to instantly compute network address, broadcast, usable host range, subnet mask, wildcard mask, and binary representations. Results are RFC 791 / RFC 4632 accurate.
           </p>
         </div>
       </div>
 
       {/* Input */}
-      <div className="glass rounded-2xl p-6 mb-6 space-y-4">
+      <div className="glass rounded-2xl p-4 sm:p-6 mb-6 space-y-4">
         <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">CIDR Input</label>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
           <input
             type="text" value={input} onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && calculate()}
             placeholder="192.168.1.0/24"
-            className="flex-1 glass rounded-xl px-4 py-3 text-sm text-white font-mono outline-none border border-white/[0.1] focus:border-blue-500 transition-colors"
+            className="flex-1 glass rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-white font-mono outline-none border border-white/[0.1] focus:border-blue-500 transition-colors"
           />
           <button onClick={calculate}
-            className="btn-primary px-5 py-3 text-sm font-semibold rounded-xl flex items-center gap-2">
+            className="btn-primary px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold rounded-xl flex items-center justify-center gap-2">
             <Calculator size={14} /> Calculate
           </button>
         </div>

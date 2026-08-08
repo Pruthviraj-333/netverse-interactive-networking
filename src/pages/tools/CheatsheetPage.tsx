@@ -82,35 +82,47 @@ export default function CheatsheetPage() {
   );
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8 animate-in">
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-            <BookOpen size={20} className="text-violet-400" />
+    <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-8 animate-in">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0">
+              <BookOpen size={20} className="text-violet-400" />
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+                Network Cheatsheet
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">RFC-Accurate Quick Reference</p>
+            </div>
           </div>
-          <div>
-            <h1 className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
-              Network Cheatsheet
-            </h1>
-            <p className="text-sm text-slate-500 mt-0.5">RFC-Accurate Quick Reference</p>
-          </div>
-          <span className="ml-auto badge-violet">Tool</span>
+          <span className="badge-violet shrink-0">Tool</span>
         </div>
-        <div className="glass rounded-xl p-5">
-          <p className="text-sm text-slate-300 leading-relaxed">
+        <div className="glass rounded-xl p-4 sm:p-5">
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
             Your go-to reference for well-known ports, IP address ranges, TCP flags, and subnet quick reference. All values are RFC-grounded and production-accurate.
           </p>
         </div>
       </div>
 
-      <div className="tab-bar mb-6">
+      <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none">
         {([
           { id: 'ports', label: '🔌 Well-Known Ports' },
           { id: 'ips', label: '📍 IP Ranges' },
           { id: 'tcp-flags', label: '🚩 TCP Flags' },
           { id: 'subnets', label: '📊 Subnet Reference' },
         ] as { id: Section; label: string }[]).map(({ id, label }) => (
-          <button key={id} onClick={() => setActiveSection(id)} className={`tab-item ${activeSection === id ? 'active' : ''}`}>{label}</button>
+          <button
+            key={id}
+            onClick={() => setActiveSection(id)}
+            className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
+              activeSection === id
+                ? 'bg-violet-500/20 border-violet-500/40 text-violet-300 shadow-lg shadow-violet-500/10'
+                : 'glass border-white/[0.06] text-slate-400 hover:text-white'
+            }`}
+          >
+            {label}
+          </button>
         ))}
       </div>
 
@@ -118,10 +130,10 @@ export default function CheatsheetPage() {
         <div className="space-y-4">
           <input type="text" value={portFilter} onChange={e => setPortFilter(e.target.value)}
             placeholder="Filter by port number or service name..."
-            className="w-full glass rounded-xl px-4 py-2.5 text-sm text-white font-mono outline-none border border-white/[0.1] focus:border-violet-500 transition-colors"
+            className="w-full glass rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white font-mono outline-none border border-white/[0.1] focus:border-violet-500 transition-colors"
           />
-          <div className="glass-strong rounded-2xl overflow-hidden border border-white/[0.06]">
-            <table className="w-full text-xs">
+          <div className="glass-strong rounded-2xl overflow-x-auto border border-white/[0.06]">
+            <table className="w-full text-xs min-w-[500px]">
               <thead className="border-b border-white/[0.06]">
                 <tr className="text-slate-400 text-[10px] uppercase tracking-wider">
                   {['Port', 'Protocol', 'Service', 'Copy'].map(h => (
@@ -149,8 +161,8 @@ export default function CheatsheetPage() {
       )}
 
       {activeSection === 'ips' && (
-        <div className="glass-strong rounded-2xl overflow-hidden border border-white/[0.06]">
-          <table className="w-full text-xs">
+        <div className="glass-strong rounded-2xl overflow-x-auto border border-white/[0.06]">
+          <table className="w-full text-xs min-w-[550px]">
             <thead className="border-b border-white/[0.06]">
               <tr className="text-slate-400 text-[10px] uppercase tracking-wider">
                 {['CIDR Range', 'Name', 'Max Hosts', 'Use Case'].map(h => (
@@ -188,8 +200,8 @@ export default function CheatsheetPage() {
       )}
 
       {activeSection === 'subnets' && (
-        <div className="glass-strong rounded-2xl overflow-hidden border border-white/[0.06]">
-          <table className="w-full text-xs">
+        <div className="glass-strong rounded-2xl overflow-x-auto border border-white/[0.06]">
+          <table className="w-full text-xs min-w-[500px]">
             <thead className="border-b border-white/[0.06]">
               <tr className="text-slate-400 text-[10px] uppercase tracking-wider">
                 {['CIDR', 'Subnet Mask', 'Usable Hosts', 'Common Use'].map(h => (

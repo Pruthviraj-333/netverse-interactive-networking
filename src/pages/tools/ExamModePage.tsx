@@ -63,35 +63,37 @@ export default function ExamModePage() {
   const score = examFinished ? calculateScore() : { correct: 0, total: 0, percentage: 0 };
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 animate-in">
+    <div className="max-w-4xl mx-auto px-3 sm:px-6 py-4 sm:py-8 animate-in">
       {/* Title Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-            <Award size={20} className="text-amber-400" />
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+              <Award size={20} className="text-amber-400" />
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Networking Certification Practice Exam</h1>
+              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">Timed 15-Question Technical Assessment Simulator</p>
+            </div>
           </div>
-          <div>
-            <h1 className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Networking Certification Practice Exam</h1>
-            <p className="text-sm text-slate-500 mt-0.5">Timed 15-Question Technical Assessment Simulator</p>
-          </div>
-          <span className="ml-auto badge-amber">Exam Simulator</span>
+          <span className="badge-amber shrink-0">Exam Simulator</span>
         </div>
       </div>
 
       {/* Start Exam Screen */}
       {!examStarted && (
-        <div className="glass rounded-2xl p-8 text-center space-y-6 border border-white/[0.08]">
+        <div className="glass rounded-2xl p-5 sm:p-8 text-center space-y-6 border border-white/[0.08]">
           <div className="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto">
             <Award size={32} className="text-amber-400" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-xl font-bold text-white">Ready for your Networking Evaluation?</h2>
-            <p className="text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
+            <h2 className="text-lg sm:text-xl font-bold text-white">Ready for your Networking Evaluation?</h2>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
               Test your mastery across L2-L7 Protocols, Subnetting, TCP/IP, Cloud VPCs, eBPF, and SRE Linux Kernel Tuning.
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-sm mx-auto text-xs">
             <div className="glass p-3 rounded-xl border border-white/10">
               <div className="text-slate-400 font-mono">Questions</div>
               <div className="text-base font-bold text-white mt-0.5">15 MCQs</div>

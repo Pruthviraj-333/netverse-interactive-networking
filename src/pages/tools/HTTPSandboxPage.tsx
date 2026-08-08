@@ -16,31 +16,33 @@ export default function HTTPSandboxPage() {
   ]);
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8 animate-in">
+    <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-8 animate-in">
       {/* Title Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-            <Code2 size={20} className="text-cyan-400" />
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0">
+              <Code2 size={20} className="text-cyan-400" />
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">HTTP Protocol & QUIC Laboratory</h1>
+              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">HTTP/1.1 vs HTTP/2 Multiplexing vs HTTP/3 QUIC (UDP)</p>
+            </div>
           </div>
-          <div>
-            <h1 className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">HTTP Protocol & QUIC Laboratory</h1>
-            <p className="text-sm text-slate-500 mt-0.5">HTTP/1.1 vs HTTP/2 Multiplexing vs HTTP/3 QUIC (UDP)</p>
-          </div>
-          <span className="ml-auto badge-cyan">Interactive Tool</span>
+          <span className="badge-cyan shrink-0">Interactive Tool</span>
         </div>
       </div>
 
       {/* Protocol Selection */}
-      <div className="glass rounded-xl p-5 mb-6 space-y-4">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="glass rounded-xl p-4 sm:p-5 mb-6 space-y-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Select Protocol Version</label>
-          <div className="flex gap-2 glass p-1 rounded-xl">
+          <div className="flex flex-wrap gap-1 sm:gap-2 glass p-1 rounded-xl justify-center">
             {(['HTTP/1.1', 'HTTP/2', 'HTTP/3 (QUIC)'] as const).map((p) => (
               <button
                 key={p}
                 onClick={() => setProtocolVersion(p)}
-                className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                className={`px-2.5 sm:px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   protocolVersion === p
                     ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/20'
                     : 'text-slate-400 hover:text-white'
