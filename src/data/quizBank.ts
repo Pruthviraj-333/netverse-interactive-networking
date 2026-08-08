@@ -518,6 +518,39 @@ export const quizBank: QuizQuestion[] = [
     ],
     explanation: 'Cilium uses eBPF kernel technology to replace sequential iptables rule processing with O(1) BPF map lookups, drastically reducing packet latency in large clusters.',
   },
+
+  // ── Ethernet & Frames ────────────────────────────────────────────────────────
+  {
+    id: 'ethernet-q1',
+    topicId: 'ethernet',
+    type: 'mcq',
+    difficulty: 'beginner',
+    question: 'What is the purpose of the 4-byte Frame Check Sequence (FCS) at the end of an Ethernet II frame?',
+    options: [
+      { id: 'a', text: 'To specify the destination MAC address', isCorrect: false, explanation: 'Destination MAC is in bytes 9-14.' },
+      { id: 'b', text: 'To detect bit-level transmission errors using a CRC-32 checksum', isCorrect: true, explanation: 'FCS contains a CRC-32 checksum calculated over the frame. If the receiver recalculation fails, the frame is corrupted and discarded.' },
+      { id: 'c', text: 'To encrypt payload data', isCorrect: false, explanation: 'Ethernet frames are unencrypted unless MACsec (802.1AE) or upper-layer TLS is used.' },
+      { id: 'd', text: 'To assign VLAN tags', isCorrect: false, explanation: '802.1Q tags are inserted after the Source MAC.' },
+    ],
+    explanation: 'The 4-byte FCS field uses CRC-32 to detect frame corruption during physical medium transmission.',
+  },
+
+  // ── MAC Addresses ────────────────────────────────────────────────────────────
+  {
+    id: 'mac-q1',
+    topicId: 'mac-address',
+    type: 'mcq',
+    difficulty: 'intermediate',
+    question: 'How do you determine if a MAC address is a Unicast or Multicast address by looking at its raw bytes?',
+    options: [
+      { id: 'a', text: 'Check if the last octet is 255', isCorrect: false, explanation: 'MAC addresses use hexadecimal notation.' },
+      { id: 'b', text: 'Examine Bit 0 (the least significant bit) of the first octet: 0 = Unicast, 1 = Multicast', isCorrect: true, explanation: 'Per IEEE 802, Bit 0 of the first octet is the I/G (Individual/Group) bit. 0 means unicast (individual device), 1 means multicast/broadcast (group).' },
+      { id: 'c', text: 'Check if the first 3 bytes match 00:00:00', isCorrect: false, explanation: 'First 3 bytes are the manufacturer OUI.' },
+      { id: 'd', text: 'Check if all bits are set to 0', isCorrect: false, explanation: 'All zeroes is an uninitialized/null MAC.' },
+    ],
+    explanation: 'Bit 0 of the first octet of a MAC address indicates Unicast (0) vs Multicast/Group (1).',
+  },
 ];
 
 export default quizBank;
+

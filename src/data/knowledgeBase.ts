@@ -152,6 +152,91 @@ const knowledgeBase: KnowledgeEntry[] = [
       'I am not confident enough to answer this accurately. Please verify with RFC documentation at https://www.rfc-editor.org/ or the relevant topic page in NetVerse.',
     confidence: 'uncertain',
   },
+  // ── Phase 2/3 Expansions ─────────────────────────────────────────────────
+  {
+    id: 'http-versions',
+    keywords: ['http', 'http2', 'http3', 'quic', 'multiplexing', 'hol', 'head of line'],
+    question: 'What are the differences between HTTP/1.1, HTTP/2, and HTTP/3?',
+    answer:
+      'HTTP/1.1 (RFC 9112): One request per TCP connection (or pipelined, but still sequential). HTTP/2 (RFC 9113): Multiplexed streams over a single TCP connection — no app-layer HOL blocking, binary framing, HPACK header compression. HTTP/3 (RFC 9114): Runs over QUIC (UDP). QUIC streams are independent so a dropped packet only blocks that stream, not others. TLS 1.3 is mandatory in HTTP/3.',
+    topicId: 'http',
+    references: [
+      { title: 'RFC 9114 – HTTP/3', url: 'https://www.rfc-editor.org/rfc/rfc9114', type: 'rfc', rfcNumber: 9114 },
+    ],
+    confidence: 'high',
+  },
+  {
+    id: 'ssh-keys',
+    keywords: ['ssh', 'key', 'rsa', 'ed25519', 'authorized_keys', 'keygen', 'tunneling'],
+    question: 'How does SSH public key authentication work?',
+    answer:
+      'SSH public key auth (RFC 4252): 1) Client sends public key to server. 2) Server checks authorized_keys for matching key. 3) Server sends a challenge (random data). 4) Client signs challenge with private key. 5) Server verifies signature using public key. No password transmitted. Algorithms: Ed25519 (preferred, small key, fast), RSA-4096, ECDSA. Generate: ssh-keygen -t ed25519. Copy: ssh-copy-id user@host.',
+    topicId: 'ssh',
+    references: [
+      { title: 'RFC 4252 – SSH Auth Protocol', url: 'https://www.rfc-editor.org/rfc/rfc4252', type: 'rfc', rfcNumber: 4252 },
+    ],
+    confidence: 'high',
+  },
+  {
+    id: 'routing-bgp',
+    keywords: ['bgp', 'routing', 'autonomous system', 'as path', 'prefix', 'advertise'],
+    question: 'How does BGP routing work?',
+    answer:
+      'BGP-4 (RFC 4271) is a path-vector protocol — the routing protocol of the Internet. Routers establish BGP sessions (TCP port 179) with neighbors (peers). Each router advertises IP prefixes it can reach with AS_PATH attributes. Longest-prefix match selects the route; tie-breaking uses AS_PATH length, LOCAL_PREF, MED. eBGP runs between different Autonomous Systems (ISPs); iBGP runs within an AS. The global DFZ (Default-Free Zone) has ~900,000 IPv4 routes.',
+    topicId: 'routing',
+    references: [
+      { title: 'RFC 4271 – BGP-4', url: 'https://www.rfc-editor.org/rfc/rfc4271', type: 'rfc', rfcNumber: 4271 },
+    ],
+    confidence: 'high',
+  },
+  {
+    id: 'iptables-basics',
+    keywords: ['iptables', 'firewall', 'netfilter', 'chain', 'nat', 'filter', 'rules'],
+    question: 'How does iptables work?',
+    answer:
+      'iptables is a userspace utility that configures Linux Netfilter kernel hooks. It organizes rules in TABLES (filter, nat, mangle) and CHAINS (PREROUTING, INPUT, FORWARD, OUTPUT, POSTROUTING). Packets traverse chains sequentially; first matching rule action (ACCEPT, DROP, REJECT, DNAT, SNAT) wins. The filter table INPUT chain handles inbound traffic to local processes. PREROUTING in the nat table handles DNAT (port forwarding) before routing decisions. nftables is the modern successor.',
+    topicId: 'firewalls',
+    confidence: 'high',
+  },
+  {
+    id: 'docker-network-types',
+    keywords: ['docker', 'bridge', 'overlay', 'host', 'network', 'container', 'veth'],
+    question: 'How does Docker container networking work?',
+    answer:
+      'Docker uses Linux network namespaces (netns) to isolate each container\'s network stack. A veth (virtual ethernet) pair connects container netns to the host docker0 bridge. The default bridge driver assigns 172.17.0.x IPs. Docker adds iptables MASQUERADE rules for outbound NAT. Other drivers: host (no isolation, uses host network stack), overlay (VXLAN-based multi-host, used in Swarm), macvlan (direct MAC assignment to container). User-defined bridge networks have automatic DNS resolution between containers by name.',
+    topicId: 'docker-networking',
+    confidence: 'high',
+  },
+  {
+    id: 'k8s-service-types',
+    keywords: ['kubernetes', 'service', 'clusterip', 'nodeport', 'loadbalancer', 'ingress'],
+    question: 'What are Kubernetes Service types?',
+    answer:
+      'K8s Service types: ClusterIP (default): Virtual IP accessible only within cluster, backed by iptables/IPVS kube-proxy rules. NodePort: Exposes service on every node IP at a static port (30000-32767). LoadBalancer: Provisions a cloud load balancer (e.g. AWS NLB) pointing to NodePorts. ExternalName: DNS CNAME alias to external hostname. Ingress (not a Service type but a resource): L7 HTTP routing rules handled by an Ingress Controller (Nginx, Traefik, AWS ALB Controller).',
+    topicId: 'kubernetes-networking',
+    confidence: 'high',
+  },
+  {
+    id: 'dhcp-options',
+    keywords: ['dhcp', 'option', '43', '53', '55', 'vendor', 'requested'],
+    question: 'What are DHCP Options?',
+    answer:
+      'DHCP Options (RFC 2132) are TLV (type-length-value) extensions in DHCP messages. Common options: 1 = Subnet Mask, 3 = Default Gateway (Router), 6 = DNS Server(s), 15 = Domain Name, 51 = IP Lease Time, 53 = DHCP Message Type (1=Discover,2=Offer,3=Request,5=Ack), 54 = DHCP Server Identifier, 55 = Parameter Request List (client requests specific options), 119 = Domain Search List. Option 43 carries vendor-specific information (e.g. access point controller IP in enterprise Wi-Fi).',
+    topicId: 'dhcp',
+    references: [
+      { title: 'RFC 2132 – DHCP Options', url: 'https://www.rfc-editor.org/rfc/rfc2132', type: 'rfc', rfcNumber: 2132 },
+    ],
+    confidence: 'high',
+  },
+  {
+    id: 'ethernet-frame',
+    keywords: ['ethernet', 'frame', 'preamble', 'sfd', 'fcs', 'crc', 'mtu', 'ethertype'],
+    question: 'What are the fields in an Ethernet II frame?',
+    answer:
+      'Ethernet II frame (IEEE 802.3): 7-byte Preamble (clock sync, 0xAA repeated), 1-byte SFD Start Frame Delimiter (0xAB), 6-byte Destination MAC, 6-byte Source MAC, 2-byte EtherType (0x0800=IPv4, 0x86DD=IPv6, 0x0806=ARP, 0x8100=802.1Q VLAN), 46–1500 byte Payload, 4-byte FCS (CRC-32 error detection). Minimum frame size: 64 bytes (payload padded to 46 bytes). Maximum: 1518 bytes standard, 9022 bytes jumbo frames.',
+    topicId: 'ethernet',
+    confidence: 'high',
+  },
 ];
 
 export default knowledgeBase;

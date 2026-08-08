@@ -7,8 +7,8 @@ export const NAV_SECTIONS: NavSection[] = [
     icon: 'BookOpen',
     color: '#3b82f6',
     items: [
-      { id: 'osi-model',   title: 'OSI Model',         path: '/topic/osi-model',   topicId: 'osi-model' },
-      { id: 'tcpip-model', title: 'TCP/IP Model',       path: '/topic/tcpip-model', topicId: 'tcpip-model' },
+      { id: 'osi-model',   title: 'OSI Model',   path: '/topic/osi-model',   topicId: 'osi-model' },
+      { id: 'tcpip-model', title: 'TCP/IP Model', path: '/topic/tcpip-model', topicId: 'tcpip-model' },
     ],
   },
   {
@@ -17,9 +17,9 @@ export const NAV_SECTIONS: NavSection[] = [
     icon: 'Link',
     color: '#f59e0b',
     items: [
-      { id: 'ethernet',    title: 'Ethernet & Frames',  path: '/topic/ethernet',    topicId: 'ethernet' },
-      { id: 'mac-address', title: 'MAC Addresses',      path: '/topic/mac-address', topicId: 'mac-address' },
-      { id: 'arp',         title: 'ARP',                path: '/topic/arp',         topicId: 'arp' },
+      { id: 'ethernet',    title: 'Ethernet & Frames', path: '/topic/ethernet',    topicId: 'ethernet' },
+      { id: 'mac-address', title: 'MAC Addresses',     path: '/topic/mac-address', topicId: 'mac-address' },
+      { id: 'arp',         title: 'ARP',               path: '/topic/arp',         topicId: 'arp' },
     ],
   },
   {
@@ -40,8 +40,8 @@ export const NAV_SECTIONS: NavSection[] = [
     icon: 'Activity',
     color: '#3b82f6',
     items: [
-      { id: 'tcp', title: 'TCP',   path: '/topic/tcp', topicId: 'tcp' },
-      { id: 'udp', title: 'UDP',   path: '/topic/udp', topicId: 'udp' },
+      { id: 'tcp',  title: 'TCP',  path: '/topic/tcp',  topicId: 'tcp' },
+      { id: 'udp',  title: 'UDP',  path: '/topic/udp',  topicId: 'udp' },
       { id: 'icmp', title: 'ICMP', path: '/topic/icmp', topicId: 'icmp' },
     ],
   },
@@ -74,19 +74,31 @@ export const NAV_SECTIONS: NavSection[] = [
     icon: 'Cloud',
     color: '#f43f5e',
     items: [
-      { id: 'aws-vpc', title: 'AWS VPC',     path: '/topic/vpc',                topicId: 'vpc' },
-      { id: 'docker',  title: 'Docker Nets', path: '/topic/docker-networking',  topicId: 'docker-networking' },
+      { id: 'aws-vpc', title: 'AWS VPC',     path: '/topic/vpc',                   topicId: 'vpc' },
+      { id: 'docker',  title: 'Docker Nets', path: '/topic/docker-networking',     topicId: 'docker-networking' },
       { id: 'k8s-net', title: 'Kubernetes',  path: '/topic/kubernetes-networking', topicId: 'kubernetes-networking' },
+    ],
+  },
+  {
+    id: 'tools',
+    title: 'Tools & Reference',
+    icon: 'Wrench',
+    color: '#a855f7',
+    items: [
+      { id: 'subnet-calc', title: 'Subnet Calculator', path: '/tools/subnet',    topicId: 'subnet-calc' },
+      { id: 'packets',     title: 'Packet Inspector',  path: '/tools/packets',   topicId: 'packets' },
+      { id: 'cheatsheet',  title: 'Cheatsheet',        path: '/tools/cheatsheet', topicId: 'cheatsheet' },
+      { id: 'interview',   title: 'Interview Prep',    path: '/tools/interview', topicId: 'interview' },
     ],
   },
 ];
 
 export const LEARNING_MODES = [
-  { id: 'beginner',    label: 'Beginner',    description: 'Start from scratch' },
+  { id: 'beginner',     label: 'Beginner',     description: 'Start from scratch' },
   { id: 'intermediate', label: 'Intermediate', description: 'Solidify concepts' },
-  { id: 'advanced',    label: 'Advanced',    description: 'Deep technical detail' },
-  { id: 'interview',   label: 'Interview',   description: 'Prep for technical rounds' },
-  { id: 'cheatsheet',  label: 'Cheat Sheet', description: 'Quick reference' },
+  { id: 'advanced',     label: 'Advanced',     description: 'Deep technical detail' },
+  { id: 'interview',    label: 'Interview',    description: 'Prep for technical rounds' },
+  { id: 'cheatsheet',   label: 'Cheat Sheet',  description: 'Quick reference' },
 ] as const;
 
 export type LearningMode = typeof LEARNING_MODES[number]['id'];

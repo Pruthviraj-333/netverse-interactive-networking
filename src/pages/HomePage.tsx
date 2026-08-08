@@ -62,7 +62,8 @@ export default function HomePage() {
           {[
             { label: 'Topics Viewed', value: viewedCount, color: '#3b82f6' },
             { label: 'Quiz Average', value: totalQuizzes > 0 ? `${averageScore}%` : '—', color: '#10b981' },
-            { label: 'Phase 1 Topics', value: 5, color: '#8b5cf6' },
+            { label: 'Curriculum Topics', value: 21, color: '#8b5cf6' },
+            { label: 'Interactive Tools', value: 4, color: '#06b6d4' },
           ].map((stat) => (
             <div key={stat.label} className="glass rounded-xl px-5 py-3 text-center">
               <div className="text-2xl font-bold font-mono" style={{ color: stat.color }}>{stat.value}</div>
@@ -74,8 +75,8 @@ export default function HomePage() {
 
       {/* Featured Topics */}
       <div className="mb-12">
-        <h2 className="text-lg font-semibold text-white mb-1">Phase 1 — Core Topics</h2>
-        <p className="text-sm text-slate-500 mb-5">Start here to build your networking foundation.</p>
+        <h2 className="text-lg font-semibold text-white mb-1">Featured Interactive Topics</h2>
+        <p className="text-sm text-slate-500 mb-5">Start with these core foundations or explore the full sidebar.</p>
 
         <motion.div
           variants={containerVariants}
@@ -167,9 +168,8 @@ export default function HomePage() {
             <h3 className="text-white font-semibold mb-2">Technical Accuracy First</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
               Every animation, packet flow, and explanation in NetVerse is grounded in official sources:
-              IETF RFCs, Cisco documentation, Linux kernel source, AWS/Azure/GCP documentation, and Kubernetes docs.
+              IETF RFCs, IEEE standards, Linux kernel source, AWS VPC specs, and Kubernetes CNI docs.
               We never simplify a concept in a way that makes it technically wrong.
-              If we can't represent something accurately, we say so explicitly.
             </p>
           </div>
         </div>
@@ -177,26 +177,22 @@ export default function HomePage() {
 
       {/* Phase roadmap */}
       <div className="mt-10">
-        <h2 className="text-lg font-semibold text-white mb-4">Platform Roadmap</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Curriculum Completion Roadmap</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           {[
-            { phase: 'Phase 1', label: 'Core Foundations', status: 'current', topics: 'OSI, DNS, TCP, ARP, IP/Subnetting, Quiz, AI Tutor' },
-            { phase: 'Phase 2', label: 'Protocol Deep Dives', status: 'next', topics: 'DHCP, NAT, UDP, ICMP, HTTP, HTTPS/TLS, SSH, Groq AI' },
-            { phase: 'Phase 3', label: 'Infrastructure', status: 'planned', topics: 'Routing, Switching, Firewalls, Docker, Kubernetes Networking' },
-            { phase: 'Phase 4', label: 'Cloud & Advanced', status: 'planned', topics: 'AWS VPC, Azure VNet, GCP VPC, Service Mesh, Progress Tracking' },
+            { phase: 'Phase 1', label: 'Core Foundations', status: 'done', topics: 'OSI, TCP/IP, DNS, TCP, ARP, Subnetting' },
+            { phase: 'Phase 2', label: 'Protocol Deep Dives', status: 'done', topics: 'DHCP, NAT/PAT, UDP, ICMP, HTTPS, AI Tutor' },
+            { phase: 'Phase 3', label: 'Infrastructure & Cloud', status: 'done', topics: 'HTTP/3, SSH, Routing, Firewalls, LB, VPC, Docker, K8s' },
+            { phase: 'Phase 4', label: 'Tools & Polish', status: 'done', topics: 'Ethernet, MAC, Subnet Calc, Packet Inspector, Cheatsheet, Interview' },
           ].map((p) => (
             <div
               key={p.phase}
-              className="glass rounded-xl p-4"
-              style={p.status === 'current' ? { borderColor: '#3b82f630', boxShadow: '0 0 20px rgba(59,130,246,0.08)' } : {}}
+              className="glass rounded-xl p-4 border border-emerald-500/30"
+              style={{ boxShadow: '0 0 20px rgba(16,185,129,0.06)' }}
             >
               <div className="flex items-center gap-2 mb-2">
-                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                  p.status === 'current' ? 'bg-electric-500/20 text-electric-300 border border-electric-500/30' :
-                  p.status === 'next'    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
-                  'bg-slate-500/10 text-slate-500 border border-slate-500/20'
-                }`}>
-                  {p.status === 'current' ? '✅ LIVE' : p.status === 'next' ? '🔜 NEXT' : '📅 PLANNED'}
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  ✅ COMPLETE
                 </span>
               </div>
               <div className="text-sm font-semibold text-white mb-0.5">{p.phase}</div>
@@ -206,6 +202,7 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+
     </div>
   );
 }
