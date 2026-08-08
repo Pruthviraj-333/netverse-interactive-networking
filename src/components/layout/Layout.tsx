@@ -1,23 +1,35 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useSettings } from '../../stores';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import GlobalSearch from './GlobalSearch';
 import AITutor from '../tutor/AITutor';
+import ToastContainer from '../common/ToastContainer';
+import ShortcutsModal from '../common/ShortcutsModal';
 
 export default function Layout() {
-  const { sidebarCollapsed, searchOpen, setSearchOpen, tutorOpen } = useSettings();
+  const { sidebarCollapsed, searchOpen, setSearchOpen, tutorOpen, setTutorOpen } = useSettings();
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
 
-  // Global keyboard shortcut: Ctrl+K / Cmd+K
+  // Global keyboard shortcuts: Ctrl+K (Search), Ctrl+T (AI Tutor), ? (Shortcuts)
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      const activeTag = document.activeElement?.tagName.toLowerCase();
+      const isInput = activeTag === 'input' || activeTag === 'textarea' || (document.activeElement as HTMLElement)?.isContentEditable;
+
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setSearchOpen(true);
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 't') {
+        e.preventDefault();
+        setTutorOpen(!tutorOpen);
+      } else if (e.key === '?' && !isInput) {
+        e.preventDefault();
+        setShortcutsOpen((v) => !v);
       }
     },
-    [setSearchOpen]
+    [setSearchOpen, setTutorOpen, tutorOpen]
   );
 
   useEffect(() => {
@@ -42,6 +54,8 @@ export default function Layout() {
       </div>
 
       <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <ShortcutsModal open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
+      <ToastContainer />
     </div>
   );
 }

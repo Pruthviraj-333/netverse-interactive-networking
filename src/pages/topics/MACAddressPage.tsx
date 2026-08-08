@@ -5,6 +5,7 @@ import { OSILayerBadge } from '../../components/shared/OSIComponents';
 import CodeBlock from '../../components/shared/CodeBlock';
 import ReferencePanel from '../../components/shared/ReferencePanel';
 import Quiz from '../../components/quiz/Quiz';
+import TopicFooterNav from '../../components/common/TopicFooterNav';
 import { useProgress } from '../../stores';
 import type { Reference } from '../../types';
 
@@ -237,6 +238,8 @@ cat /sys/class/net/eth0/address
 # Watch for ARP changes (detect spoofing)
 sudo arpwatch -i eth0`} />
       <div className="mt-8"><ReferencePanel references={REFERENCES} /></div>
+      <TopicFooterNav currentTopicId="mac-address" />
     </div>
   );
 }
+

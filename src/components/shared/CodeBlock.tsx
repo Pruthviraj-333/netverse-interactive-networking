@@ -5,6 +5,7 @@ import Prism from 'prismjs';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-json';
 import { copyToClipboard } from '../../utils/helpers';
+import { useToast } from '../../stores/toastStore';
 
 interface CodeBlockProps {
   code: string;
@@ -41,6 +42,7 @@ export default function CodeBlock({
     const ok = await copyToClipboard(code);
     if (ok) {
       setCopied(true);
+      useToast.getState().addToast('Copied to clipboard! 📋', 'success');
       setTimeout(() => setCopied(false), 1800);
     }
   };

@@ -35,8 +35,38 @@ export default function AnimationControls({
   const [showSpeeds, setShowSpeeds] = useState(false);
   const progress = totalSteps > 0 ? (currentStep / (totalSteps - 1)) * 100 : 0;
 
+  // Keyboard shortcut listener for animation controls
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeTag = document.activeElement?.tagName.toLowerCase();
+      if (activeTag === 'input' || activeTag === 'textarea' || (document.activeElement as HTMLElement)?.isContentEditable) {
+        return;
+      }
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        isPlaying ? onPause() : onPlay();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        if (currentStep < totalSteps - 1) onStepForward();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (currentStep > 0) onStepBack();
+      } else if (e.key === 'r' || e.key === 'R') {
+        if (!e.ctrlKey && !e.metaKey) {
+          e.preventDefault();
+          onReset();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isPlaying, currentStep, totalSteps, onPlay, onPause, onStepForward, onStepBack, onReset]);
+
   return (
     <div className="glass rounded-xl p-3 space-y-3">
+
       {/* Progress bar */}
       <div className="space-y-1.5">
         <div className="flex justify-between text-xs text-slate-400">

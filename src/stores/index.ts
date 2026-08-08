@@ -33,9 +33,11 @@ export const useSettings = create<SettingsStore>()(
 
 // ─── Progress Store ───────────────────────────────────────────────────────────
 interface ProgressStore extends UserProgress {
+  bookmarks: string[];
   markTopicViewed: (topicId: string) => void;
   markAnimationCompleted: (topicId: string) => void;
   recordQuizScore: (topicId: string, score: number) => void;
+  toggleBookmark: (topicId: string) => boolean;
   resetProgress: () => void;
 }
 
@@ -50,6 +52,7 @@ export const useProgress = create<ProgressStore>()(
   persist(
     (set, get) => ({
       ...defaultProgress,
+      bookmarks: [],
 
       markTopicViewed: (topicId) =>
         set((state) => ({
@@ -76,6 +79,16 @@ export const useProgress = create<ProgressStore>()(
           },
         })),
 
+      toggleBookmark: (topicId) => {
+        const { bookmarks } = get();
+        const exists = (bookmarks || []).includes(topicId);
+        const updated = exists
+          ? (bookmarks || []).filter((id) => id !== topicId)
+          : [...(bookmarks || []), topicId];
+        set({ bookmarks: updated });
+        return !exists; // returns true if now bookmarked
+      },
+
       recordQuizScore: (topicId, score) => {
         const { topics, totalQuizzes } = get();
         const prev = topics[topicId];
@@ -100,11 +113,12 @@ export const useProgress = create<ProgressStore>()(
         }));
       },
 
-      resetProgress: () => set({ ...defaultProgress }),
+      resetProgress: () => set({ ...defaultProgress, bookmarks: [] }),
     }),
     { name: 'netverse-progress' }
   )
 );
+
 
 // ─── Quiz Session Store ───────────────────────────────────────────────────────
 interface QuizStore {

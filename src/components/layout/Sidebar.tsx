@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   BookOpen, Link as LinkIcon, Globe, Activity, Code2,
   Server, Cloud, ChevronDown, ChevronRight, Zap,
-  BarChart2, Lock
+  BarChart2, Lock, Cpu
 } from 'lucide-react';
 import { NAV_SECTIONS } from '../../data/navigation';
 import { useProgress } from '../../stores';
@@ -21,6 +21,7 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   Cloud:     <Cloud     size={15} />,
   BarChart2: <BarChart2 size={15} />,
   Lock:      <Lock      size={15} />,
+  Cpu:       <Cpu       size={15} />,
 };
 
 interface SidebarSectionProps {
@@ -31,7 +32,7 @@ interface SidebarSectionProps {
 function SidebarSection({ section, defaultOpen = false }: SidebarSectionProps) {
   const [open, setOpen] = useState(defaultOpen);
   const location = useLocation();
-  const { topics } = useProgress();
+  const { topics, bookmarks } = useProgress();
 
   const isActiveSection = section.items.some(
     (item) => location.pathname === item.path
@@ -75,6 +76,7 @@ function SidebarSection({ section, defaultOpen = false }: SidebarSectionProps) {
               const viewed = progress?.viewed ?? false;
               const hasScore = progress?.quizScore !== undefined;
               const isSoon = item.badge === 'Soon';
+              const isBookmarked = (bookmarks || []).includes(item.topicId || item.id);
 
               return (
                 <li key={item.id}>
@@ -98,12 +100,17 @@ function SidebarSection({ section, defaultOpen = false }: SidebarSectionProps) {
                       }
                     >
                       <span className="flex-1 truncate">{item.title}</span>
+                      {isBookmarked && (
+                        <span className="text-amber-400 text-xs shrink-0" title="Bookmarked">
+                          ★
+                        </span>
+                      )}
                       {hasScore && (
                         <span className="text-[10px] text-emerald-400 font-mono shrink-0">
                           {progress!.quizScore}%
                         </span>
                       )}
-                      {viewed && !hasScore && (
+                      {viewed && !hasScore && !isBookmarked && (
                         <span className="w-1.5 h-1.5 rounded-full bg-electric-500/60 shrink-0" />
                       )}
                     </NavLink>
@@ -117,6 +124,7 @@ function SidebarSection({ section, defaultOpen = false }: SidebarSectionProps) {
     </div>
   );
 }
+
 
 interface SidebarProps {
   collapsed: boolean;

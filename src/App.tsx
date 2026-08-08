@@ -26,9 +26,19 @@ const VPCPage = lazy(() => import('./pages/topics/VPCPage'));
 const DockerNetworkingPage = lazy(() => import('./pages/topics/DockerNetworkingPage'));
 const KubernetesNetworkingPage = lazy(() => import('./pages/topics/KubernetesNetworkingPage'));
 
+// Advanced & SRE Pages
+const ServiceMeshPage = lazy(() => import('./pages/topics/ServiceMeshPage'));
+const EBPFPage = lazy(() => import('./pages/topics/EBPFPage'));
+const VPNPage = lazy(() => import('./pages/topics/VPNPage'));
+const KernelTuningPage = lazy(() => import('./pages/topics/KernelTuningPage'));
+
 // Lazy-loaded Tool Pages
 const SubnetCalculatorPage = lazy(() => import('./pages/tools/SubnetCalculatorPage'));
+const PacketJourneyPage = lazy(() => import('./pages/tools/PacketJourneyPage'));
+const DNSResolverPage = lazy(() => import('./pages/tools/DNSResolverPage'));
+const HTTPSandboxPage = lazy(() => import('./pages/tools/HTTPSandboxPage'));
 const PacketPlaygroundPage = lazy(() => import('./pages/tools/PacketPlaygroundPage'));
+const ExamModePage = lazy(() => import('./pages/tools/ExamModePage'));
 const CheatsheetPage = lazy(() => import('./pages/tools/CheatsheetPage'));
 const InterviewPrepPage = lazy(() => import('./pages/tools/InterviewPrepPage'));
 
@@ -84,11 +94,21 @@ export default function App() {
             <Route path="/topic/docker-networking"     element={<DockerNetworkingPage />} />
             <Route path="/topic/kubernetes-networking" element={<KubernetesNetworkingPage />} />
 
+            {/* Advanced & SRE */}
+            <Route path="/topic/service-mesh"  element={<ServiceMeshPage />} />
+            <Route path="/topic/ebpf"          element={<EBPFPage />} />
+            <Route path="/topic/vpn-tunnels"   element={<VPNPage />} />
+            <Route path="/topic/kernel-tuning" element={<KernelTuningPage />} />
+
             {/* Standalone Tools & Practice */}
-            <Route path="/tools/subnet font" element={<Navigate to="/tools/subnet" replace />} />
-            <Route path="/tools/subnet font" element={<Navigate to="/tools/subnet" replace />} />
-            <Route path="/tools/subnet"      element={<SubnetCalculatorPage />} />
+            <Route path="/tools/subnet font"   element={<Navigate to="/tools/subnet" replace />} />
+            <Route path="/tools/subnet font"   element={<Navigate to="/tools/subnet" replace />} />
+            <Route path="/tools/subnet"        element={<SubnetCalculatorPage />} />
+            <Route path="/tools/packet-journey"element={<PacketJourneyPage />} />
+            <Route path="/tools/dns-resolver"  element={<DNSResolverPage />} />
+            <Route path="/tools/http-sandbox"element={<HTTPSandboxPage />} />
             <Route path="/tools/packets"     element={<PacketPlaygroundPage />} />
+            <Route path="/tools/exam"        element={<ExamModePage />} />
             <Route path="/tools/cheatsheet"  element={<CheatsheetPage />} />
             <Route path="/tools/interview"   element={<InterviewPrepPage />} />
 

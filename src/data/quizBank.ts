@@ -550,7 +550,71 @@ export const quizBank: QuizQuestion[] = [
     ],
     explanation: 'Bit 0 of the first octet of a MAC address indicates Unicast (0) vs Multicast/Group (1).',
   },
+  // ── Service Mesh & mTLS ──────────────────────────────────────────────────────
+  {
+    id: 'sm-q1',
+    topicId: 'service-mesh',
+    type: 'mcq',
+    difficulty: 'advanced',
+    question: 'How does Mutual TLS (mTLS) in a Service Mesh (e.g. Istio) authenticate workload identity without hardcoded passwords?',
+    options: [
+      { id: 'a', text: 'By passing bearer tokens in HTTP headers', isCorrect: false, explanation: 'Bearer tokens can leak and require app-level handling.' },
+      { id: 'b', text: 'By exchanging X.509 certificates with SPIFFE ID SANs during the TLS handshake', isCorrect: true, explanation: 'Envoy proxies exchange short-lived X.509 certs with SPIFFE IDs in the SAN field, ensuring cryptographically verified pod identity.' },
+      { id: 'c', text: 'By matching source IP addresses against a whitelist', isCorrect: false, explanation: 'Kubernetes Pod IPs are ephemeral and not trusted.' },
+      { id: 'd', text: 'By storing shared SSH keys in Kubernetes Secrets', isCorrect: false, explanation: 'SSH is not used for Envoy mTLS.' },
+    ],
+    explanation: 'Service mesh mTLS uses SPIFFE X.509 certificates for mutual cryptographic identity verification between sidecar proxies.',
+  },
+
+  // ── eBPF ─────────────────────────────────────────────────────────────────────
+  {
+    id: 'ebpf-q1',
+    topicId: 'ebpf',
+    type: 'mcq',
+    difficulty: 'advanced',
+    question: 'Why does eBPF networking (e.g. Cilium CNI) achieve significantly lower latency than legacy iptables at scale?',
+    options: [
+      { id: 'a', text: 'Because eBPF runs in userspace with high priority', isCorrect: false, explanation: 'eBPF runs in kernel space, not userspace.' },
+      { id: 'b', text: 'Because eBPF uses O(1) hash maps for routing instead of sequential O(N) iptables rule evaluation', isCorrect: true, explanation: 'iptables scans rules linearly O(N), whereas eBPF maps perform constant-time O(1) lookups and bypass netfilter.' },
+      { id: 'c', text: 'Because eBPF disables TCP checksums', isCorrect: false, explanation: 'eBPF preserves full TCP checksum integrity.' },
+      { id: 'd', text: 'Because eBPF relies on hardware switches', isCorrect: false, explanation: 'eBPF is pure Linux kernel software.' },
+    ],
+    explanation: 'eBPF replaces linear O(N) iptables rule scanning with O(1) kernel hash map lookups.',
+  },
+
+  // ── VPNs & Overlay Tunnels ───────────────────────────────────────────────────
+  {
+    id: 'vpn-q1',
+    topicId: 'vpn-tunnels',
+    type: 'mcq',
+    difficulty: 'intermediate',
+    question: 'What is the main difference between IPsec Transport Mode and IPsec Tunnel Mode?',
+    options: [
+      { id: 'a', text: 'Transport mode encrypts only the payload; Tunnel mode encrypts the entire original IP packet inside a new IP header', isCorrect: true, explanation: 'Transport mode preserves original IP headers for host-to-host; Tunnel mode encapsulates full packets inside outer IP headers for site-to-site VPNs.' },
+      { id: 'b', text: 'Tunnel mode uses UDP, Transport mode uses TCP', isCorrect: false, explanation: 'Both use ESP/AH protocols.' },
+      { id: 'c', text: 'Transport mode is unencrypted', isCorrect: false, explanation: 'Both modes encrypt traffic.' },
+      { id: 'd', text: 'Tunnel mode only supports IPv6', isCorrect: false, explanation: 'Both support IPv4 and IPv6.' },
+    ],
+    explanation: 'IPsec Tunnel Mode encrypts the entire original IP packet and wraps it in a new outer IP header for gateway-to-gateway VPNs.',
+  },
+
+  // ── Kernel TCP Tuning ───────────────────────────────────────────────────────
+  {
+    id: 'kt-q1',
+    topicId: 'kernel-tuning',
+    type: 'mcq',
+    difficulty: 'advanced',
+    question: 'What happens if a high-throughput Linux server exceeds `net.netfilter.nf_conntrack_max`?',
+    options: [
+      { id: 'a', text: 'The kernel automatically switches to UDP', isCorrect: false, explanation: 'Kernel does not alter transport protocols.' },
+      { id: 'b', text: 'The kernel drops incoming packets and logs "nf_conntrack: table full"', isCorrect: true, explanation: 'When conntrack table fills up, netfilter drops new packets immediately, causing service outages.' },
+      { id: 'c', text: 'Connections are routed around the firewall', isCorrect: false, explanation: 'Firewall logic is enforced; packets are dropped.' },
+      { id: 'd', text: 'Memory is swapped to disk', isCorrect: false, explanation: 'Conntrack operates in locked kernel memory.' },
+    ],
+    explanation: 'When the connection tracking table is full, Linux drops new connection packets immediately.',
+  },
 ];
 
 export default quizBank;
+
 

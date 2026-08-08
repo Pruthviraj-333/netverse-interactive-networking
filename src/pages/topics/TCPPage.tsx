@@ -6,6 +6,7 @@ import { OSILayerBadge } from '../../components/shared/OSIComponents';
 import CodeBlock from '../../components/shared/CodeBlock';
 import ReferencePanel from '../../components/shared/ReferencePanel';
 import Quiz from '../../components/quiz/Quiz';
+import TopicFooterNav from '../../components/common/TopicFooterNav';
 import { useProgress } from '../../stores';
 import type { Reference } from '../../types';
 
@@ -480,6 +481,9 @@ nc -zv google.com 443    # test TCP connectivity to port 443`}
       <div className="mt-8">
         <ReferencePanel references={REFERENCES} />
       </div>
+
+      <TopicFooterNav currentTopicId="tcp" />
     </div>
   );
 }
+

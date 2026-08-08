@@ -6,6 +6,7 @@ import AnimationControls from '../../components/shared/AnimationControls';
 import CodeBlock from '../../components/shared/CodeBlock';
 import ReferencePanel from '../../components/shared/ReferencePanel';
 import Quiz from '../../components/quiz/Quiz';
+import TopicFooterNav from '../../components/common/TopicFooterNav';
 import { useProgress } from '../../stores';
 import { osiLayerColor } from '../../utils/helpers';
 import type { Reference } from '../../types';
@@ -472,6 +473,9 @@ sudo tcpdump -i eth0 -n -v 'host 8.8.8.8'`}
       <div className="mt-8">
         <ReferencePanel references={REFERENCES} />
       </div>
+
+      <TopicFooterNav currentTopicId="osi-model" />
     </div>
   );
 }
+

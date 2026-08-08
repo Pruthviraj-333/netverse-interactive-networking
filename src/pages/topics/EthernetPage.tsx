@@ -6,6 +6,7 @@ import { OSILayerBadge } from '../../components/shared/OSIComponents';
 import CodeBlock from '../../components/shared/CodeBlock';
 import ReferencePanel from '../../components/shared/ReferencePanel';
 import Quiz from '../../components/quiz/Quiz';
+import TopicFooterNav from '../../components/common/TopicFooterNav';
 import { useProgress } from '../../stores';
 import type { Reference } from '../../types';
 
@@ -230,6 +231,8 @@ sudo ip link add link eth0 name eth0.100 type vlan id 100
 sudo ip link set eth0.100 up
 ip -d link show eth0.100`} />
       <div className="mt-8"><ReferencePanel references={REFERENCES} /></div>
+      <TopicFooterNav currentTopicId="ethernet" />
     </div>
   );
 }
+
