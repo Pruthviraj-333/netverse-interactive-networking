@@ -150,10 +150,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-electric-500 to-cyan-500 flex items-center justify-center glow-blue">
             <Zap size={16} className="text-white" />
           </div>
-          <div>
-            <div className="text-sm font-bold text-white tracking-tight">NetVerse</div>
-            <div className="text-[10px] text-slate-500">Networking Academy</div>
-          </div>
+          <span className="text-base font-bold text-white tracking-tight">NetVerse</span>
         </div>
 
         {/* Progress bar */}
