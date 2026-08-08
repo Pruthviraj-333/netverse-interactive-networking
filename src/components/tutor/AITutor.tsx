@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, Send, Trash2, ExternalLink, AlertCircle, Zap, Cpu } from 'lucide-react';
+import { Bot, Send, Trash2, ExternalLink, AlertCircle, Zap, Cpu, Copy, Check } from 'lucide-react';
 import { streamGroqAnswer, GROQ_AVAILABLE } from '../../utils/groq';
 import { useTutorStore } from '../../stores';
 import { cn, uid } from '../../utils/helpers';
@@ -54,6 +54,43 @@ function renderInline(text: string) {
   });
 }
 
+// ─── Code Block with Copy Button ────────────────────────────────────────────────
+function CodeBlockWithCopy({ text, lang }: { text: string; lang?: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="my-2 rounded-lg bg-slate-950/90 border border-white/10 p-2.5 font-mono text-xs overflow-x-auto relative group">
+      <div className="flex items-center justify-between text-[10px] text-slate-500 pb-1 mb-1.5 border-b border-white/5 uppercase">
+        <span className="font-semibold text-violet-400/80">{lang || 'command'}</span>
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-white bg-white/[0.06] hover:bg-white/10 rounded px-1.5 py-0.5 transition-all border border-white/5"
+          title="Copy command to clipboard"
+        >
+          {copied ? (
+            <>
+              <Check size={10} className="text-emerald-400" />
+              <span className="text-emerald-400 font-bold">Copied!</span>
+            </>
+          ) : (
+            <>
+              <Copy size={10} />
+              <span>Copy</span>
+            </>
+          )}
+        </button>
+      </div>
+      <pre className="text-cyan-300 whitespace-pre-wrap select-all">{text}</pre>
+    </div>
+  );
+}
+
 // ─── Structured Markdown Block Parser ───────────────────────────────────────────
 function StructuredMarkdown({ content }: { content: string }) {
   // Split into code blocks and normal text blocks
@@ -77,14 +114,7 @@ function StructuredMarkdown({ content }: { content: string }) {
     <div className="space-y-2 text-sm leading-relaxed">
       {blocks.map((block, bIdx) => {
         if (block.type === 'code') {
-          return (
-            <div key={bIdx} className="my-2 rounded-lg bg-slate-950/80 border border-white/10 p-2.5 font-mono text-xs overflow-x-auto">
-              <div className="flex items-center justify-between text-[10px] text-slate-500 pb-1 mb-1.5 border-b border-white/5 uppercase">
-                <span>{block.lang || 'code'}</span>
-              </div>
-              <pre className="text-cyan-300 whitespace-pre-wrap">{block.text}</pre>
-            </div>
-          );
+          return <CodeBlockWithCopy key={bIdx} text={block.text} lang={block.lang} />;
         }
 
         // Process lines in text block
