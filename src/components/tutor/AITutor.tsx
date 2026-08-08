@@ -36,27 +36,116 @@ function TypingIndicator({ streaming }: { streaming: boolean }) {
   );
 }
 
+// ─── Inline formatting helper ──────────────────────────────────────────────────
+function renderInline(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i} className="text-white font-semibold">{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return (
+        <code key={i} className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-white/[0.08] text-cyan-300 border border-white/10">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
+// ─── Structured Markdown Block Parser ───────────────────────────────────────────
+function StructuredMarkdown({ content }: { content: string }) {
+  // Split into code blocks and normal text blocks
+  const codeBlockRegex = /```([a-zA-Z0-9_+-]*)\n([\s\S]*?)```/g;
+  const blocks: Array<{ type: 'code' | 'text'; lang?: string; text: string }> = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = codeBlockRegex.exec(content)) !== null) {
+    if (match.index > lastIndex) {
+      blocks.push({ type: 'text', text: content.slice(lastIndex, match.index) });
+    }
+    blocks.push({ type: 'code', lang: match[1] || 'bash', text: match[2].trim() });
+    lastIndex = match.index + match[0].length;
+  }
+  if (lastIndex < content.length) {
+    blocks.push({ type: 'text', text: content.slice(lastIndex) });
+  }
+
+  return (
+    <div className="space-y-2 text-sm leading-relaxed">
+      {blocks.map((block, bIdx) => {
+        if (block.type === 'code') {
+          return (
+            <div key={bIdx} className="my-2 rounded-lg bg-slate-950/80 border border-white/10 p-2.5 font-mono text-xs overflow-x-auto">
+              <div className="flex items-center justify-between text-[10px] text-slate-500 pb-1 mb-1.5 border-b border-white/5 uppercase">
+                <span>{block.lang || 'code'}</span>
+              </div>
+              <pre className="text-cyan-300 whitespace-pre-wrap">{block.text}</pre>
+            </div>
+          );
+        }
+
+        // Process lines in text block
+        const lines = block.text.split('\n');
+        return (
+          <div key={bIdx} className="space-y-1.5">
+            {lines.map((line, lIdx) => {
+              const trimmed = line.trim();
+              if (!trimmed) return <div key={lIdx} className="h-1" />;
+
+              // Section Headings (### or ## or #)
+              if (trimmed.startsWith('#')) {
+                const headingText = trimmed.replace(/^#+\s*/, '');
+                return (
+                  <div key={lIdx} className="pt-2 pb-0.5 border-b border-white/[0.06] mb-1">
+                    <span className="text-xs font-bold text-violet-300 uppercase tracking-wider flex items-center gap-1.5">
+                      {renderInline(headingText)}
+                    </span>
+                  </div>
+                );
+              }
+
+              // Bullet List Items (- or * or •)
+              if (/^[-*•]\s+/.test(trimmed)) {
+                const itemText = trimmed.replace(/^[-*•]\s+/, '');
+                return (
+                  <div key={lIdx} className="flex items-start gap-2 pl-1 my-0.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-violet-400 mt-1.5 shrink-0" />
+                    <span className="text-slate-300 text-xs">{renderInline(itemText)}</span>
+                  </div>
+                );
+              }
+
+              // Numbered List Items (1. 2. 3.)
+              const numMatch = trimmed.match(/^(\d+)\.\s+(.*)/);
+              if (numMatch) {
+                return (
+                  <div key={lIdx} className="flex items-start gap-2 pl-1 my-0.5">
+                    <span className="text-[11px] font-bold text-violet-400 shrink-0 font-mono">{numMatch[1]}.</span>
+                    <span className="text-slate-300 text-xs">{renderInline(numMatch[2])}</span>
+                  </div>
+                );
+              }
+
+              // Standard Paragraph Line
+              return (
+                <p key={lIdx} className="text-slate-300 text-xs leading-normal">
+                  {renderInline(trimmed)}
+                </p>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 // ─── Message bubble ───────────────────────────────────────────────────────────
 function TutorMessageBubble({ msg, isStreaming }: { msg: TutorMessage; isStreaming?: boolean }) {
   const isUser = msg.role === 'user';
-
-  // Parse simple markdown: **bold**, `code`
-  const renderContent = (text: string) => {
-    const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
-    return parts.map((part, i) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={i} className="text-white font-semibold">{part.slice(2, -2)}</strong>;
-      }
-      if (part.startsWith('`') && part.endsWith('`')) {
-        return (
-          <code key={i} className="font-mono text-[11px] px-1 py-0.5 rounded bg-white/[0.08] text-electric-300">
-            {part.slice(1, -1)}
-          </code>
-        );
-      }
-      return <span key={i}>{part}</span>;
-    });
-  };
 
   return (
     <motion.div
@@ -73,13 +162,13 @@ function TutorMessageBubble({ msg, isStreaming }: { msg: TutorMessage; isStreami
       <div className={cn('max-w-[88%] space-y-2', isUser ? 'items-end' : 'items-start')}>
         <div
           className={cn(
-            'px-3 py-2.5 rounded-2xl text-sm leading-relaxed',
+            'px-3.5 py-3 rounded-2xl text-xs leading-relaxed shadow-sm',
             isUser
-              ? 'bg-electric-600/20 border border-electric-500/30 text-slate-200 rounded-br-sm'
-              : 'glass rounded-bl-sm text-slate-300'
+              ? 'bg-electric-600/25 border border-electric-500/35 text-slate-100 rounded-br-sm'
+              : 'glass-strong border border-white/[0.08] rounded-bl-sm text-slate-300'
           )}
         >
-          <span>{renderContent(msg.content)}</span>
+          <StructuredMarkdown content={msg.content} />
           {isStreaming && (
             <span className="inline-block w-0.5 h-4 bg-violet-400 ml-0.5 animate-pulse align-middle" />
           )}
