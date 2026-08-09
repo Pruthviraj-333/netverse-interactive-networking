@@ -13,7 +13,7 @@ const REFERENCES: Reference[] = [
   { title: 'Istio Service Mesh Documentation', url: 'https://istio.io/latest/docs/', type: 'official', description: 'Control plane & Envoy sidecar architecture' },
   { title: 'Envoy Proxy Architecture & Features', url: 'https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/arch_overview', type: 'official' },
   { title: 'RFC 8446 – TLS 1.3 Specification', url: 'https://www.rfc-editor.org/rfc/rfc8446', type: 'rfc', rfcNumber: 8446 },
-  { title: 'Linkerd Service Mesh Documentation', url: 'https://linkerd.io/2.14/overview/', type: 'official' },
+  { title: 'Linkerd Service Mesh Documentation', url: 'https://linkerd.io/2/overview/', type: 'official' },
 ];
 
 interface MeshStep {

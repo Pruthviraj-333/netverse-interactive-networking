@@ -101,8 +101,6 @@ export default function App() {
             <Route path="/topic/kernel-tuning" element={<KernelTuningPage />} />
 
             {/* Standalone Tools & Practice */}
-            <Route path="/tools/subnet font"   element={<Navigate to="/tools/subnet" replace />} />
-            <Route path="/tools/subnet font"   element={<Navigate to="/tools/subnet" replace />} />
             <Route path="/tools/subnet"        element={<SubnetCalculatorPage />} />
             <Route path="/tools/packet-journey"element={<PacketJourneyPage />} />
             <Route path="/tools/dns-resolver"  element={<DNSResolverPage />} />

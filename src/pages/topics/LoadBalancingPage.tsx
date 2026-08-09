@@ -10,7 +10,7 @@ import type { Reference } from '../../types';
 
 const REFERENCES: Reference[] = [
   { title: 'HAProxy Documentation – Load Balancing Algorithms', url: 'http://cbonte.github.io/haproxy-dconv/', type: 'official' },
-  { title: 'AWS Elastic Load Balancing (ALB vs NLB)', url: 'https://docs.aws.amazon.com/elk/', type: 'aws' },
+  { title: 'AWS Elastic Load Balancing (ALB vs NLB)', url: 'https://docs.aws.amazon.com/elasticloadbalancing/', type: 'aws' },
   { title: 'Nginx Load Balancing Guide', url: 'https://docs.nginx.com/nginx/admin-guide/load-balancer/', type: 'official' },
 ];
 

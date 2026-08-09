@@ -11,8 +11,8 @@ import { useProgress } from '../../stores';
 import type { Reference } from '../../types';
 
 const REFERENCES: Reference[] = [
-  { title: 'IEEE 802.3 Ethernet Standard', url: 'https://standards.ieee.org/ieee/802.3/7071/', type: 'official' },
-  { title: 'IEEE 802.1Q VLAN Tagging', url: 'https://standards.ieee.org/ieee/802.1Q/6844/', type: 'official' },
+  { title: 'IEEE 802.3 Ethernet Standard', url: 'https://ieee802.org/3/', type: 'official' },
+  { title: 'IEEE 802.1Q VLAN Tagging', url: 'https://ieee802.org/1/', type: 'official' },
   { title: 'RFC 894 — IP over Ethernet', url: 'https://www.rfc-editor.org/rfc/rfc894', type: 'rfc', rfcNumber: 894 },
 ];
 

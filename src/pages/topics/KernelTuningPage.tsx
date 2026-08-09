@@ -10,7 +10,7 @@ import { useProgress } from '../../stores';
 import type { Reference } from '../../types';
 
 const REFERENCES: Reference[] = [
-  { title: 'Linux Kernel Documentation – IP Sysctl', url: 'https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt', type: 'linux', description: 'Official sysctl parameters for Linux TCP/IP stack' },
+  { title: 'Linux Kernel Documentation – IP Sysctl', url: 'https://docs.kernel.org/networking/ip-sysctl.html', type: 'linux', description: 'Official sysctl parameters for Linux TCP/IP stack' },
   { title: 'Cloudflare – Tuning Linux for High Throughput', url: 'https://blog.cloudflare.com/optimizing-tcp-keep-alives-linux/', type: 'official' },
   { title: 'RFC 9293 – Transmission Control Protocol', url: 'https://www.rfc-editor.org/rfc/rfc9293', type: 'rfc', rfcNumber: 9293 },
 ];
