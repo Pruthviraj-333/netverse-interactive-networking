@@ -115,7 +115,7 @@ const ARP_STEPS: ARPStep[] = [
 const REFERENCES: Reference[] = [
   { title: 'RFC 826 – An Ethernet Address Resolution Protocol', url: 'https://www.rfc-editor.org/rfc/rfc826', type: 'rfc', rfcNumber: 826, description: 'Original ARP specification (1982)' },
   { title: 'RFC 5227 – IPv4 Address Conflict Detection (Gratuitous ARP)', url: 'https://www.rfc-editor.org/rfc/rfc5227', type: 'rfc', rfcNumber: 5227 },
-  { title: 'Linux Neighbor Discovery (ARP)', url: 'https://www.kernel.org/doc/html/latest/networking/neighbour.html', type: 'linux', description: 'Linux kernel neighbour cache documentation' },
+  { title: 'Linux Neighbor Discovery (ARP)', url: 'https://docs.kernel.org/networking/neighbour.html', type: 'linux', description: 'Linux kernel neighbour cache documentation' },
 ];
 
 export default function ARPPage() {

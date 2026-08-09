@@ -12,7 +12,7 @@ import type { Reference } from '../../types';
 const REFERENCES: Reference[] = [
   { title: 'ebpf.io – eBPF Documentation & Architecture', url: 'https://ebpf.io/what-is-ebpf/', type: 'official', description: 'Official eBPF Linux kernel architecture documentation' },
   { title: 'Cilium CNI – eBPF-based Kubernetes Networking', url: 'https://docs.cilium.io/en/stable/', type: 'official' },
-  { title: 'Linux Kernel BPF Documentation', url: 'https://www.kernel.org/doc/html/latest/bpf/index.html', type: 'linux' },
+  { title: 'Linux Kernel BPF Documentation', url: 'https://docs.kernel.org/bpf/index.html', type: 'linux' },
 ];
 
 interface EBPFStep {

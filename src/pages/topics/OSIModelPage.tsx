@@ -107,7 +107,7 @@ const REFERENCES: Reference[] = [
   { title: 'ISO/IEC 7498-1 – OSI Reference Model', url: 'https://www.iso.org/standard/20269.html', type: 'official', description: 'The original OSI model specification' },
   { title: 'RFC 791 – Internet Protocol (IPv4)', url: 'https://www.rfc-editor.org/rfc/rfc791', type: 'rfc', rfcNumber: 791, description: 'Layer 3 protocol specification' },
   { title: 'RFC 9293 – Transmission Control Protocol', url: 'https://www.rfc-editor.org/rfc/rfc9293', type: 'rfc', rfcNumber: 9293, description: 'Layer 4 TCP specification (2022 update)' },
-  { title: 'Cisco OSI Model Reference', url: 'https://www.cisco.com/c/en/us/support/docs/routers/12400-series-internet-routers/8771-40.html', type: 'cisco', description: 'Cisco\'s OSI model overview' },
+  { title: 'Cisco OSI Model Reference Chart', url: 'https://learningnetwork.cisco.com/s/article/osi-model-reference-chart', type: 'cisco', description: 'Official Cisco OSI model overview and reference chart' },
   { title: 'IEEE 802.3 Ethernet Standard', url: 'https://ieee802.org/3/', type: 'official', description: 'Layer 2 Ethernet specification' },
 ];
 
