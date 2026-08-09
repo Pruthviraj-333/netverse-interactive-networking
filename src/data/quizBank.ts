@@ -613,6 +613,38 @@ export const quizBank: QuizQuestion[] = [
     ],
     explanation: 'When the connection tracking table is full, Linux drops new connection packets immediately.',
   },
+
+  // ── IP Addressing & CIDR ───────────────────────────────────────────────────
+  {
+    id: 'ip-q1',
+    topicId: 'ip-addressing',
+    type: 'mcq',
+    difficulty: 'beginner',
+    question: 'Which RFC defines the reserved private IPv4 address ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16)?',
+    options: [
+      { id: 'a', text: 'RFC 791', isCorrect: false, explanation: 'RFC 791 defines core IPv4.' },
+      { id: 'b', text: 'RFC 1918', isCorrect: true, explanation: 'RFC 1918 specifies private IPv4 address allocation for non-routable internal networks.' },
+      { id: 'c', text: 'RFC 4632', isCorrect: false, explanation: 'RFC 4632 specifies CIDR.' },
+      { id: 'd', text: 'RFC 8200', isCorrect: false, explanation: 'RFC 8200 specifies IPv6.' },
+    ],
+    explanation: 'RFC 1918 defines private IP ranges that are not routed on the public internet.',
+  },
+
+  // ── Subnetting ─────────────────────────────────────────────────────────────
+  {
+    id: 'sub-q1',
+    topicId: 'subnetting',
+    type: 'mcq',
+    difficulty: 'intermediate',
+    question: 'How many usable host IP addresses are available in a /26 IPv4 subnet?',
+    options: [
+      { id: 'a', text: '64', isCorrect: false, explanation: '64 is the total number of IPs (2^(32-26) = 64), but 2 are reserved for Network ID and Broadcast.' },
+      { id: 'b', text: '62', isCorrect: true, explanation: 'Usable hosts formula: 2^(32-26) - 2 = 64 - 2 = 62 usable host addresses.' },
+      { id: 'c', text: '30', isCorrect: false, explanation: '30 is for a /27 subnet.' },
+      { id: 'd', text: '126', isCorrect: false, explanation: '126 is for a /25 subnet.' },
+    ],
+    explanation: 'A /26 prefix provides 64 total addresses; subtracting 2 (Network ID & Broadcast) yields 62 usable host addresses.',
+  },
 ];
 
 export default quizBank;

@@ -9,6 +9,7 @@ const TCPIPModelPage = lazy(() => import('./pages/topics/TCPIPModelPage'));
 const EthernetPage = lazy(() => import('./pages/topics/EthernetPage'));
 const MACAddressPage = lazy(() => import('./pages/topics/MACAddressPage'));
 const ARPPage = lazy(() => import('./pages/topics/ARPPage'));
+const IPAddressingPage = lazy(() => import('./pages/topics/IPAddressingPage'));
 const SubnettingPage = lazy(() => import('./pages/topics/SubnettingPage'));
 const RoutingPage = lazy(() => import('./pages/topics/RoutingPage'));
 const NATPATPage = lazy(() => import('./pages/topics/NATPATPage'));
@@ -68,8 +69,8 @@ export default function App() {
             <Route path="/topic/arp"         element={<ARPPage />} />
 
             {/* Network Layer */}
-            <Route path="/topic/ip-addressing" element={<SubnettingPage />} />
-            <Route path="/topic/subnetting"    element={<Navigate to="/topic/ip-addressing" replace />} />
+            <Route path="/topic/ip-addressing" element={<IPAddressingPage />} />
+            <Route path="/topic/subnetting"    element={<SubnettingPage />} />
             <Route path="/topic/routing"       element={<RoutingPage />} />
             <Route path="/topic/nat"           element={<NATPATPage />} />
 
