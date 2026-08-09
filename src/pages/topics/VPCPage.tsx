@@ -38,15 +38,15 @@ export default function VPCPage() {
 
         <div className="glass rounded-xl p-5 mb-3">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Simple: </span>
+            <span className="text-white font-semibold">Simple explanation: </span>
             An AWS VPC (Virtual Private Cloud) is your own isolated private data center inside AWS. You define the IP range, subnets, route tables, and firewalls.
           </p>
         </div>
 
         <div className="glass rounded-xl p-5">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Technical: </span>
-            A VPC is a logically isolated virtual network defined by an IPv4 CIDR block (e.g. `10.0.0.0/16`). It spans all Availability Zones (AZs) in an AWS Region. Subnets reside inside specific AZs. Internet Gateways (IGW) provide public internet connectivity to Public Subnets, while NAT Gateways allow Private Subnets outbound-only internet access.
+            <span className="text-white font-semibold">Technical explanation: </span>
+            A VPC is a logically isolated virtual network defined by an IPv4 CIDR block (e.g. <code className="font-mono text-orange-400 bg-orange-500/10 px-1.5 py-0.5 rounded border border-orange-500/20 text-xs">10.0.0.0/16</code>). It spans all Availability Zones (AZs) in an AWS Region. Subnets reside inside specific AZs. Internet Gateways (IGW) provide public internet connectivity to Public Subnets, while NAT Gateways allow Private Subnets outbound-only internet access.
           </p>
         </div>
       </div>
@@ -104,8 +104,8 @@ export default function VPCPage() {
             <div className="glass rounded-xl p-5 border border-white/[0.06] space-y-2">
               <h3 className="text-sm font-bold text-white">Security Groups (SG)</h3>
               <p className="text-xs text-slate-300 leading-relaxed">Operates at the Elastic Network Interface (ENI / EC2 instance) level.</p>
-              <ul className="text-xs text-slate-400 space-y-1 font-mono pt-2">
-                <li>• **Stateful:** Return traffic is automatically allowed.</li>
+              <ul className="text-xs text-slate-400 space-y-1 pt-2">
+                <li>• <strong className="text-white font-semibold">Stateful:</strong> Return traffic is automatically allowed.</li>
                 <li>• Supports ALLOW rules only (no explicit DENY).</li>
               </ul>
             </div>
@@ -113,8 +113,8 @@ export default function VPCPage() {
             <div className="glass rounded-xl p-5 border border-white/[0.06] space-y-2">
               <h3 className="text-sm font-bold text-white">Network ACLs (NACL)</h3>
               <p className="text-xs text-slate-300 leading-relaxed">Operates at the Subnet boundary level.</p>
-              <ul className="text-xs text-slate-400 space-y-1 font-mono pt-2">
-                <li>• **Stateless:** Must explicitly allow both inbound and outbound traffic.</li>
+              <ul className="text-xs text-slate-400 space-y-1 pt-2">
+                <li>• <strong className="text-white font-semibold">Stateless:</strong> Must explicitly allow both inbound and outbound traffic.</li>
                 <li>• Supports both ALLOW and DENY rules. Evaluated in rule number order.</li>
               </ul>
             </div>

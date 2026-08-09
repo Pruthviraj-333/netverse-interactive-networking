@@ -72,15 +72,15 @@ export default function DockerNetworkingPage() {
 
         <div className="glass rounded-xl p-5 mb-3">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Simple: </span>
+            <span className="text-white font-semibold">Simple explanation: </span>
             Docker networking connects isolated container boxes together and exposes their ports to the outside world using virtual cables (veth pairs) and virtual switches (bridges).
           </p>
         </div>
 
         <div className="glass rounded-xl p-5">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Technical: </span>
-            Docker leverages Linux Kernel **Network Namespaces (`netns`)**, **Virtual Ethernet Pairs (`veth`)**, and **iptables NAT**. When a container starts in bridge mode, a `veth` pair is created: one end inside the container's isolated `netns` as `eth0`, the other attached to host bridge `docker0`.
+            <span className="text-white font-semibold">Technical explanation: </span>
+            Docker leverages Linux Kernel <strong className="text-white font-semibold">Network Namespaces</strong> (<code className="font-mono text-cyan-400 text-xs">netns</code>), <strong className="text-white font-semibold">Virtual Ethernet Pairs</strong> (<code className="font-mono text-cyan-400 text-xs">veth</code>), and <strong className="text-white font-semibold">iptables NAT</strong>. When a container starts in bridge mode, a <code className="font-mono text-cyan-400 text-xs">veth</code> pair is created: one end inside the container's isolated <code className="font-mono text-cyan-400 text-xs">netns</code> as <code className="font-mono text-cyan-400 text-xs">eth0</code>, the other attached to host bridge <code className="font-mono text-cyan-400 text-xs">docker0</code>.
           </p>
         </div>
       </div>

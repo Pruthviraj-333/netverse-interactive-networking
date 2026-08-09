@@ -51,15 +51,15 @@ export default function FirewallsPage() {
 
         <div className="glass rounded-xl p-5 mb-3">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Simple: </span>
+            <span className="text-white font-semibold">Simple explanation: </span>
             A Firewall is a security guard at a building entrance. It inspects incoming and outgoing network traffic based on security rules to allow or block packets.
           </p>
         </div>
 
         <div className="glass rounded-xl p-5">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Technical: </span>
-            Linux implements packet filtering via the **Netfilter** kernel architecture. `iptables` and `nftables` are userspace utilities that configure Netfilter hooks. Netfilter inspects packets across 5 core chains (`PREROUTING`, `INPUT`, `FORWARD`, `OUTPUT`, `POSTROUTING`) using stateful connection tracking (`conntrack`).
+            <span className="text-white font-semibold">Technical explanation: </span>
+            Linux implements packet filtering via the <strong className="text-white font-semibold">Netfilter</strong> kernel architecture. <code className="font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 text-xs">iptables</code> and <code className="font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 text-xs">nftables</code> are userspace utilities that configure Netfilter hooks. Netfilter inspects packets across 5 core chains (<code className="font-mono text-slate-300 text-xs">PREROUTING</code>, <code className="font-mono text-slate-300 text-xs">INPUT</code>, <code className="font-mono text-slate-300 text-xs">FORWARD</code>, <code className="font-mono text-slate-300 text-xs">OUTPUT</code>, <code className="font-mono text-slate-300 text-xs">POSTROUTING</code>) using stateful connection tracking (<code className="font-mono text-slate-300 text-xs">conntrack</code>).
           </p>
         </div>
       </div>

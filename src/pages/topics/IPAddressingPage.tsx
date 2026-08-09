@@ -74,15 +74,15 @@ export default function IPAddressingPage() {
 
         <div className="glass rounded-xl p-5 mb-3">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Simple explanation: </span>
-            An IP address is the digital mailing address of a connected device. Just as a physical postal address specifies a Country, City, Street, and House number, an IP address identifies both the **Network** the device belongs to and the specific **Host** device on that network.
+            <span className="text-white font-semibold">Simple explanation: </span>
+            An IP address is the digital mailing address of a connected device. Just as a physical postal address specifies a Country, City, Street, and House number, an IP address identifies both the <strong className="text-white font-semibold">Network</strong> the device belongs to and the specific <strong className="text-white font-semibold">Host</strong> device on that network.
           </p>
         </div>
 
         <div className="glass rounded-xl p-5">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Technical explanation (RFC 791 & RFC 4632): </span>
-            An IPv4 address is a 32-bit unsigned binary integer expressed in dot-decimal notation (4 × 8-bit octets separated by dots, e.g., `192.168.1.1`). Classless Inter-Domain Routing (CIDR) replaced legacy Classful addressing (Class A/B/C) by allowing arbitrary prefix lengths (`/0` to `/32`) to denote the boundary between Network bits and Host bits.
+            <span className="text-white font-semibold">Technical explanation (RFC 791 & RFC 4632): </span>
+            An IPv4 address is a 32-bit unsigned binary integer expressed in dot-decimal notation (4 × 8-bit octets separated by dots, e.g., <code className="font-mono text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20 text-xs">192.168.1.1</code>). Classless Inter-Domain Routing (CIDR) replaced legacy Classful addressing (Class A/B/C) by allowing arbitrary prefix lengths (<code className="font-mono text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20 text-xs">/0</code> to <code className="font-mono text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20 text-xs">/32</code>) to denote the boundary between Network bits and Host bits.
           </p>
         </div>
       </div>
@@ -155,18 +155,18 @@ export default function IPAddressingPage() {
             <div className="glass rounded-xl p-5 border border-white/[0.06] space-y-3">
               <h4 className="text-sm font-bold text-white">IPv4 (32-Bit)</h4>
               <ul className="text-xs text-slate-300 space-y-1.5 leading-relaxed">
-                <li>• **Total Address Space**: 2^32 = 4,294,967,296 addresses.</li>
-                <li>• **Notation**: Dot-decimal (e.g. `192.168.1.1`).</li>
-                <li>• **Allocation**: Fully depleted at IANA level in 2011; managed via NAT and CGN.</li>
+                <li>• <strong className="text-white font-semibold">Total Address Space:</strong> <code className="font-mono text-blue-300 bg-blue-500/10 px-1 py-0.5 rounded text-[11px]">2³² = 4,294,967,296</code> addresses.</li>
+                <li>• <strong className="text-white font-semibold">Notation:</strong> Dot-decimal (e.g. <code className="font-mono text-blue-300 text-[11px]">192.168.1.1</code>).</li>
+                <li>• <strong className="text-white font-semibold">Allocation:</strong> Fully depleted at IANA level in 2011; managed via NAT and CGN.</li>
               </ul>
             </div>
 
             <div className="glass rounded-xl p-5 border border-purple-500/20 space-y-3">
               <h4 className="text-sm font-bold text-purple-400">IPv6 (128-Bit)</h4>
               <ul className="text-xs text-slate-300 space-y-1.5 leading-relaxed">
-                <li>• **Total Address Space**: 2^128 ≈ 3.4 × 10^38 addresses (340 undecillion).</li>
-                <li>• **Notation**: 8 hex blocks separated by colons (e.g., `2001:0db8:85a3:0000:0000:8a2e:0370:7334`).</li>
-                <li>• **Features**: Built-in IPsec support, zero broadcast (uses multicast), stateless autoconfiguration (SLAAC).</li>
+                <li>• <strong className="text-purple-300 font-semibold">Total Address Space:</strong> <code className="font-mono text-purple-300 bg-purple-500/10 px-1 py-0.5 rounded text-[11px]">2¹²⁸ ≈ 3.4 × 10³⁸</code> addresses (340 undecillion).</li>
+                <li>• <strong className="text-purple-300 font-semibold">Notation:</strong> 8 hex blocks separated by colons (e.g. <code className="font-mono text-purple-300 text-[11px]">2001:db8::1</code>).</li>
+                <li>• <strong className="text-purple-300 font-semibold">Features:</strong> Built-in IPsec support, zero broadcast (uses multicast), stateless autoconfiguration (SLAAC).</li>
               </ul>
             </div>
           </div>

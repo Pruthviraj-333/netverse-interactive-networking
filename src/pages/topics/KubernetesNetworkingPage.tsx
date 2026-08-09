@@ -52,15 +52,15 @@ export default function KubernetesNetworkingPage() {
 
         <div className="glass rounded-xl p-5 mb-3">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Simple: </span>
+            <span className="text-white font-semibold">Simple explanation: </span>
             Kubernetes treats every Pod as an independent computer with its own unique IP address. Pods across different nodes can talk directly to each other without NAT.
           </p>
         </div>
 
         <div className="glass rounded-xl p-5">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Technical: </span>
-            The **Kubernetes Network Model** enforces four strict requirements: (1) Pod-to-Pod without NAT, (2) Node-to-Pod without NAT, (3) IP-per-Pod consistency, (4) No port mapping needed. Networking is implemented via CNI plugins (Cilium, Calico) and `kube-proxy` (iptables / IPVS / eBPF).
+            <span className="text-white font-semibold">Technical explanation: </span>
+            The <strong className="text-white font-semibold">Kubernetes Network Model</strong> enforces four strict requirements: (1) Pod-to-Pod without NAT, (2) Node-to-Pod without NAT, (3) IP-per-Pod consistency, (4) No port mapping needed. Networking is implemented via CNI plugins (Cilium, Calico) and <code className="font-mono text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20 text-xs">kube-proxy</code> (iptables / IPVS / eBPF).
           </p>
         </div>
       </div>

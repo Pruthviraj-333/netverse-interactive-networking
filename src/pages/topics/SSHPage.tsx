@@ -96,15 +96,15 @@ export default function SSHPage() {
 
         <div className="glass rounded-xl p-5 mb-3">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Simple: </span>
+            <span className="text-white font-semibold">Simple explanation: </span>
             SSH is a secure CLI telephone call to a remote computer. It lets Linux sysadmins and cloud engineers log into servers over untrusted networks like the Internet safely.
           </p>
         </div>
 
         <div className="glass rounded-xl p-5">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Technical (RFC 4251): </span>
-            SSH runs over TCP port 22 and consists of three sub-protocols: **Transport Layer Protocol** (server authentication, confidentiality, integrity via ECDH/AES-GCM), **User Authentication Protocol** (publickey/password), and **Connection Protocol** (multiplexes channels for interactive shell, SFTP, and TCP port forwarding).
+            <span className="text-white font-semibold">Technical explanation (RFC 4251): </span>
+            SSH runs over TCP port 22 and consists of three sub-protocols: <strong className="text-white font-semibold">Transport Layer Protocol</strong> (server authentication, confidentiality, integrity via ECDH/AES-GCM), <strong className="text-white font-semibold">User Authentication Protocol</strong> (publickey/password), and <strong className="text-white font-semibold">Connection Protocol</strong> (multiplexes channels for interactive shell, SFTP, and TCP port forwarding).
           </p>
         </div>
       </div>
@@ -195,7 +195,7 @@ export default function SSHPage() {
               <Key size={16} className="text-emerald-400" /> Key Pair Comparison: ED25519 vs RSA
             </h3>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Always prefer **ED25519** (`ssh-keygen -t ed25519`). It is faster, shorter (68 chars vs 700+ chars for RSA 4096), and offers superior security against side-channel attacks based on Edwards-curve Digital Signature Algorithm (EdDSA).
+              Always prefer <strong className="text-emerald-400 font-semibold">ED25519</strong> (<code className="font-mono text-emerald-400 text-[11px]">ssh-keygen -t ed25519</code>). It is faster, shorter (68 chars vs 700+ chars for RSA 4096), and offers superior security against side-channel attacks based on Edwards-curve Digital Signature Algorithm (EdDSA).
             </p>
           </div>
 

@@ -91,15 +91,15 @@ export default function SubnettingPage() {
 
         <div className="glass rounded-xl p-5 mb-3">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Simple explanation: </span>
+            <span className="text-white font-semibold">Simple explanation: </span>
             Subnetting is the practice of dividing a large network into smaller, isolated sub-networks (subnets). It improves security, reduces broadcast traffic noise, and prevents IP address waste.
           </p>
         </div>
 
         <div className="glass rounded-xl p-5">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Technical explanation: </span>
-            Given a network block with CIDR prefix /N, the number of total host addresses is 2^(32 - N). For N ≤ 30, the number of usable host addresses is 2^(32 - N) - 2, reserving the first address for the **Network ID** (all host bits 0) and the last address for the **Broadcast Address** (all host bits 1).
+            <span className="text-white font-semibold">Technical explanation: </span>
+            Given a network block with CIDR prefix <code className="font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 text-xs">/N</code>, the total number of host addresses is <code className="font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 text-xs">2<sup>32 - N</sup></code>. For <code className="font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 text-xs">N ≤ 30</code>, the usable host count is <code className="font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 text-xs">2<sup>32 - N</sup> - 2</code>, reserving the first address for the <strong className="text-white font-semibold">Network ID</strong> (all host bits 0) and the last address for the <strong className="text-white font-semibold">Broadcast Address</strong> (all host bits 1).
           </p>
         </div>
       </div>
@@ -233,7 +233,7 @@ export default function SubnettingPage() {
                 FLSM (Fixed Length Subnet Masking)
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                All subnets created from a parent block have the **exact same subnet mask** (e.g. splitting a `/24` into 4 equal `/26` subnets of 64 IPs each). Simple to manage, but wastes addresses if subnets require drastically different numbers of hosts.
+                All subnets created from a parent block have the <strong className="text-white font-semibold">exact same subnet mask</strong> (e.g. splitting a <code className="font-mono text-blue-400 bg-blue-500/10 px-1 py-0.5 rounded text-[11px]">/24</code> into 4 equal <code className="font-mono text-blue-400 bg-blue-500/10 px-1 py-0.5 rounded text-[11px]">/26</code> subnets of 64 IPs each). Simple to manage, but wastes addresses if subnets require drastically different numbers of hosts.
               </p>
             </div>
 
@@ -243,7 +243,7 @@ export default function SubnettingPage() {
                 VLSM (Variable Length Subnet Masking)
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Subnets have **different prefix lengths** tailored specifically to host count requirements (e.g. 50 hosts $\rightarrow$ `/26`, 20 hosts $\rightarrow$ `/27`, 2 router hosts $\rightarrow$ `/30`). Maximizes address efficiency.
+                Subnets have <strong className="text-emerald-400 font-semibold">different prefix lengths</strong> tailored specifically to host count requirements (e.g. 50 hosts → <code className="font-mono text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded text-[11px]">/26</code>, 20 hosts → <code className="font-mono text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded text-[11px]">/27</code>, 2 router hosts → <code className="font-mono text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded text-[11px]">/30</code>). Maximizes address efficiency.
               </p>
             </div>
           </div>

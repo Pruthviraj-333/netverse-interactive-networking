@@ -78,15 +78,15 @@ export default function LoadBalancingPage() {
 
         <div className="glass rounded-xl p-5 mb-3">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Simple: </span>
+            <span className="text-white font-semibold">Simple explanation: </span>
             A Load Balancer is a traffic cop directing incoming user requests across multiple backend servers to prevent any single server from becoming overwhelmed.
           </p>
         </div>
 
         <div className="glass rounded-xl p-5">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Technical: </span>
-            Load balancers operate at **L4** (TCP/UDP, fast, packet-level proxying like AWS NLB / HAProxy TCP mode) or **L7** (HTTP/HTTPS, path routing, header inspection, SSL termination like AWS ALB / Nginx / Envoy). Continuous health checks remove failing instances from pool routing.
+            <span className="text-white font-semibold">Technical explanation: </span>
+            Load balancers operate at <strong className="text-white font-semibold">L4</strong> (TCP/UDP, fast, packet-level proxying like AWS NLB / HAProxy TCP mode) or <strong className="text-white font-semibold">L7</strong> (HTTP/HTTPS, path routing, header inspection, SSL termination like AWS ALB / Nginx / Envoy). Continuous health checks remove failing instances from pool routing.
           </p>
         </div>
       </div>

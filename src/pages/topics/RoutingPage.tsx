@@ -76,15 +76,15 @@ export default function RoutingPage() {
 
         <div className="glass rounded-xl p-5 mb-3">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Simple: </span>
+            <span className="text-white font-semibold">Simple explanation: </span>
             IP Routing is Google Maps for network packets. When a router receives a packet, it checks the destination address against its routing table and forwards it out the best interface.
           </p>
         </div>
 
         <div className="glass rounded-xl p-5">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Technical (RFC 1812): </span>
-            Routers forward packets based on **Longest Prefix Match (LPM)**. When an IP matches multiple subnet routes in the Routing Information Base (RIB) / Forwarding Information Base (FIB), the route with the highest CIDR prefix mask length (e.g. `/28` over `/24`) wins.
+            <span className="text-white font-semibold">Technical explanation (RFC 1812): </span>
+            Routers forward packets based on <strong className="text-white font-semibold">Longest Prefix Match (LPM)</strong>. When an IP matches multiple subnet routes in the Routing Information Base (RIB) / Forwarding Information Base (FIB), the route with the highest CIDR prefix mask length (e.g. <code className="font-mono text-blue-400 bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-500/20 text-xs">/28</code> over <code className="font-mono text-blue-400 bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-500/20 text-xs">/24</code>) wins.
           </p>
         </div>
       </div>

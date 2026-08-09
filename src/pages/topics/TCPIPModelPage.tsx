@@ -81,15 +81,15 @@ export default function TCPIPModelPage() {
 
         <div className="glass rounded-xl p-5 mb-3">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Simple: </span>
+            <span className="text-white font-semibold">Simple explanation: </span>
             The OSI Model is an ideal 7-layer textbook concept. The TCP/IP Model is the pragmatic 4-layer architecture that actually runs the global internet today.
           </p>
         </div>
 
         <div className="glass rounded-xl p-5">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <span className="text-white font-medium">Technical (RFC 1122): </span>
-            The TCP/IP model simplifies network protocol design into 4 functional layers: **Application**, **Transport**, **Internet**, and **Network Access**. Unlike OSI, TCP/IP combines OSI layers 5-7 into a unified Application layer and combines OSI layers 1-2 into Network Access.
+            <span className="text-white font-semibold">Technical explanation (RFC 1122): </span>
+            The TCP/IP model simplifies network protocol design into 4 functional layers: <strong className="text-white font-semibold">Application</strong>, <strong className="text-white font-semibold">Transport</strong>, <strong className="text-white font-semibold">Internet</strong>, and <strong className="text-white font-semibold">Network Access</strong>. Unlike OSI, TCP/IP combines OSI layers 5-7 into a unified Application layer and combines OSI layers 1-2 into Network Access.
           </p>
         </div>
       </div>
