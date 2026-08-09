@@ -34,55 +34,55 @@ export default function HomePage() {
   const viewedCount = Object.values(topics).filter((t) => t.viewed).length;
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10 animate-in">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10 animate-in">
       {/* Hero */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-center mb-14"
+        className="text-center mb-10 sm:mb-14"
       >
-        <div className="inline-flex items-center gap-2 badge-blue text-xs mb-6 px-3 py-1.5">
-          <Zap size={12} className="text-electric-400" />
-          RFC-accurate · Interactive · Visual
+        <div className="inline-flex items-center gap-2 badge-blue text-xs mb-4 sm:mb-6 px-3 py-1.5">
+          <Zap size={12} className="text-electric-400 shrink-0" />
+          <span>RFC-accurate · Interactive · Visual</span>
         </div>
-        <h1 className="text-5xl font-bold mb-4">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
           <span className="text-gradient">NetVerse</span>
         </h1>
-        <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-2">
+        <p className="text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-2 px-2">
           Build an iron-clad networking foundation for DevOps, Cloud, SRE, and Kubernetes.
         </p>
-        <p className="text-sm text-slate-600 max-w-xl mx-auto">
+        <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto px-2">
           Every concept is animated, interactive, and grounded in RFCs and official documentation.
           No fabricated behaviour. No oversimplified explanations.
         </p>
 
         {/* Stats */}
-        <div className="flex justify-center gap-6 mt-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-2xl mx-auto mt-6 sm:mt-8">
           {[
             { label: 'Topics Viewed', value: viewedCount, color: '#3b82f6' },
             { label: 'Quiz Average', value: totalQuizzes > 0 ? `${averageScore}%` : '—', color: '#10b981' },
             { label: 'Curriculum Topics', value: 21, color: '#8b5cf6' },
             { label: 'Interactive Tools', value: 4, color: '#06b6d4' },
           ].map((stat) => (
-            <div key={stat.label} className="glass rounded-xl px-5 py-3 text-center">
-              <div className="text-2xl font-bold font-mono" style={{ color: stat.color }}>{stat.value}</div>
-              <div className="text-xs text-slate-500 mt-0.5">{stat.label}</div>
+            <div key={stat.label} className="glass rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-center">
+              <div className="text-xl sm:text-2xl font-bold font-mono" style={{ color: stat.color }}>{stat.value}</div>
+              <div className="text-[11px] sm:text-xs text-slate-500 mt-0.5 truncate">{stat.label}</div>
             </div>
           ))}
         </div>
       </motion.div>
 
       {/* Featured Topics */}
-      <div className="mb-12">
-        <h2 className="text-lg font-semibold text-white mb-1">Featured Interactive Topics</h2>
-        <p className="text-sm text-slate-500 mb-5">Start with these core foundations or explore the full sidebar.</p>
+      <div className="mb-10 sm:mb-12">
+        <h2 className="text-base sm:text-lg font-semibold text-white mb-1">Featured Interactive Topics</h2>
+        <p className="text-xs sm:text-sm text-slate-500 mb-4 sm:mb-5">Start with these core foundations or explore the full sidebar.</p>
 
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
         >
           {FEATURED_TOPICS.map((topic) => {
             const progress = topics[topic.id];
@@ -92,22 +92,22 @@ export default function HomePage() {
               <motion.div key={topic.id} variants={itemVariants}>
                 <Link
                   to={topic.path}
-                  className="group block glass rounded-2xl p-5 border border-white/[0.06] hover:border-white/[0.15] transition-all duration-300 h-full"
+                  className="group block glass rounded-2xl p-4 sm:p-5 border border-white/[0.06] hover:border-white/[0.15] transition-all duration-300 h-full"
                   style={{ '--topic-color': topic.color } as React.CSSProperties}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0"
                       style={{ backgroundColor: `${topic.color}15`, border: `1px solid ${topic.color}30` }}
                     >
                       <Icon size={18} style={{ color: topic.color }} />
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
                       {progress?.viewed && (
-                        <div className="w-2 h-2 rounded-full bg-electric-500" title="Viewed" />
+                        <div className="w-2 h-2 rounded-full bg-electric-500 shrink-0" title="Viewed" />
                       )}
                       <span
-                        className="text-[10px] font-medium px-1.5 py-0.5 rounded border"
+                        className="text-[10px] font-medium px-1.5 py-0.5 rounded border truncate"
                         style={{ color: topic.color, borderColor: `${topic.color}30`, backgroundColor: `${topic.color}10` }}
                       >
                         {topic.tag}
@@ -115,7 +115,7 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  <h3 className="text-white font-semibold mb-1.5 group-hover:text-electric-300 transition-colors">
+                  <h3 className="text-sm sm:text-base text-white font-semibold mb-1.5 group-hover:text-electric-300 transition-colors">
                     {topic.title}
                   </h3>
                   <p className="text-xs text-slate-500 leading-relaxed mb-3">{topic.desc}</p>
@@ -138,9 +138,9 @@ export default function HomePage() {
       </div>
 
       {/* Learning Paths */}
-      <div className="mb-12">
-        <h2 className="text-lg font-semibold text-white mb-1">Learning Paths</h2>
-        <p className="text-sm text-slate-500 mb-5">Curriculum tailored to your target role.</p>
+      <div className="mb-10 sm:mb-12">
+        <h2 className="text-base sm:text-lg font-semibold text-white mb-1">Learning Paths</h2>
+        <p className="text-xs sm:text-sm text-slate-500 mb-4 sm:mb-5">Curriculum tailored to your target role.</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {LEARNING_PATHS.map((path) => (
@@ -161,12 +161,12 @@ export default function HomePage() {
       </div>
 
       {/* Philosophy callout */}
-      <div className="glass rounded-2xl p-6 border border-electric-500/10">
-        <div className="flex gap-4 items-start">
+      <div className="glass rounded-2xl p-4 sm:p-6 border border-electric-500/10 mb-10 sm:mb-12">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start">
           <Shield size={24} className="text-electric-400 shrink-0 mt-0.5" />
           <div>
-            <h3 className="text-white font-semibold mb-2">Technical Accuracy First</h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <h3 className="text-sm sm:text-base text-white font-semibold mb-1.5 sm:mb-2">Technical Accuracy First</h3>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
               Every animation, packet flow, and explanation in NetVerse is grounded in official sources:
               IETF RFCs, IEEE standards, Linux kernel source, AWS VPC specs, and Kubernetes CNI docs.
               We never simplify a concept in a way that makes it technically wrong.
@@ -176,9 +176,9 @@ export default function HomePage() {
       </div>
 
       {/* Phase roadmap */}
-      <div className="mt-10">
-        <h2 className="text-lg font-semibold text-white mb-4">Curriculum Completion Roadmap</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <div>
+        <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Curriculum Completion Roadmap</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {[
             { phase: 'Phase 1', label: 'Core Foundations', status: 'done', topics: 'OSI, TCP/IP, DNS, TCP, ARP, Subnetting' },
             { phase: 'Phase 2', label: 'Protocol Deep Dives', status: 'done', topics: 'DHCP, NAT/PAT, UDP, ICMP, HTTPS, AI Tutor' },

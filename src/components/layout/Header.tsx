@@ -39,7 +39,7 @@ export default function Header({ onSearchOpen }: HeaderProps) {
       {/* Center: Search bar */}
       <button
         onClick={onSearchOpen}
-        className="flex items-center gap-2 px-2 sm:px-3 py-1.5 glass rounded-lg text-slate-400 hover:text-white text-xs sm:text-sm hover:bg-white/[0.07] transition-all max-w-xs w-full mx-2 sm:mx-4 overflow-hidden"
+        className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 glass rounded-lg text-slate-400 hover:text-white text-xs sm:text-sm hover:bg-white/[0.07] transition-all max-w-xs w-full mx-1 sm:mx-4 overflow-hidden"
         aria-label="Open search"
         title="Search (Ctrl+K)"
       >
