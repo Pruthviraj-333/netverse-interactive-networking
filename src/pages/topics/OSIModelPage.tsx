@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Layers, ChevronDown, Info, ArrowDown, ArrowUp } from 'lucide-react';
 import { OSILayerBadge } from '../../components/shared/OSIComponents';
+import OSIEncapDecapVisualizer from '../../components/osi/OSIEncapDecapVisualizer';
 import AnimationControls from '../../components/shared/AnimationControls';
 import CodeBlock from '../../components/shared/CodeBlock';
 import ReferencePanel from '../../components/shared/ReferencePanel';
@@ -92,17 +93,6 @@ const OSI_LAYERS = [
   },
 ];
 
-// ─── Encapsulation animation steps ───────────────────────────────────────────
-const ENCAP_STEPS = [
-  { layer: 7, action: 'encap', label: 'App creates HTTP request: "GET / HTTP/1.1"', header: 'HTTP Header + Payload' },
-  { layer: 6, action: 'encap', label: 'TLS encrypts payload', header: 'TLS Record' },
-  { layer: 5, action: 'encap', label: 'Session ID added', header: 'Session Data' },
-  { layer: 4, action: 'encap', label: 'TCP adds src:port 54321, dst:port 443, SEQ, ACK', header: 'TCP Header' },
-  { layer: 3, action: 'encap', label: 'IP adds src:10.0.0.1, dst:142.250.64.46, TTL:64', header: 'IP Header' },
-  { layer: 2, action: 'encap', label: 'Ethernet adds src MAC, dst MAC (gateway), CRC', header: 'Ethernet Frame' },
-  { layer: 1, action: 'encap', label: 'Bits transmitted as electrical/optical signals', header: 'Bits on wire' },
-];
-
 const REFERENCES: Reference[] = [
   { title: 'ISO/IEC 7498-1 – OSI Reference Model', url: 'https://www.iso.org/standard/20269.html', type: 'official', description: 'The original OSI model specification' },
   { title: 'RFC 791 – Internet Protocol (IPv4)', url: 'https://www.rfc-editor.org/rfc/rfc791', type: 'rfc', rfcNumber: 791, description: 'Layer 3 protocol specification' },
@@ -113,38 +103,12 @@ const REFERENCES: Reference[] = [
 
 export default function OSIModelPage() {
   const [selectedLayer, setSelectedLayer] = useState<number | null>(null);
-  const [animStep, setAnimStep] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [speed, setSpeed] = useState(1);
   const [activeTab, setActiveTab] = useState<'explore' | 'encapsulation' | 'quiz'>('explore');
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const { markTopicViewed, markAnimationCompleted } = useProgress();
+  const { markTopicViewed } = useProgress();
 
   useEffect(() => {
     markTopicViewed('osi-model');
   }, [markTopicViewed]);
-
-  const clearTimer = useCallback(() => {
-    if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
-  }, []);
-
-  useEffect(() => {
-    if (isPlaying) {
-      intervalRef.current = setInterval(() => {
-        setAnimStep((s) => {
-          if (s >= ENCAP_STEPS.length - 1) {
-            setIsPlaying(false);
-            markAnimationCompleted('osi-model');
-            return s;
-          }
-          return s + 1;
-        });
-      }, Math.round(1200 / speed));
-    } else {
-      clearTimer();
-    }
-    return clearTimer;
-  }, [isPlaying, speed, clearTimer, markAnimationCompleted]);
 
   const selectedLayerData = selectedLayer !== null
     ? OSI_LAYERS.find((l) => l.number === selectedLayer) ?? null
@@ -198,7 +162,11 @@ export default function OSIModelPage() {
             onClick={() => setActiveTab(tab)}
             className={`tab-item capitalize ${activeTab === tab ? 'active' : ''}`}
           >
-            {tab === 'explore' ? '🔍 Explore Layers' : tab === 'encapsulation' ? '📦 Encapsulation' : '🧪 Quiz'}
+            {tab === 'explore'
+              ? '🔍 Explore Layers'
+              : tab === 'encapsulation'
+              ? '📦 Encapsulation & Decapsulation'
+              : '🧪 Quiz'}
           </button>
         ))}
       </div>
@@ -327,107 +295,74 @@ export default function OSIModelPage() {
         </div>
       )}
 
-      {/* ── Encapsulation Tab ────────────────────────────────────────────────── */}
+      {/* ── Encapsulation & Decapsulation Tab ─────────────────────────────────── */}
       {activeTab === 'encapsulation' && (
         <div className="space-y-6">
-          <div className="glass rounded-xl p-4 text-sm text-slate-300">
-            <span className="text-white font-medium">Encapsulation</span> is the process of adding headers (and trailers)
-            at each OSI layer as data travels down the stack before transmission.
-            <span className="text-electric-400"> Decapsulation</span> is the reverse — headers are stripped at the receiver.
+          <div className="glass rounded-xl p-5 text-sm text-slate-300 leading-relaxed space-y-2 border border-white/[0.08]">
+            <p>
+              <span className="text-white font-semibold">Encapsulation (Packaging) </span>
+              is the process where each OSI layer on the sending device wraps data received from the layer above with its own protocol header (and optional trailer), producing a new Protocol Data Unit (PDU).
+            </p>
+            <p>
+              <span className="text-emerald-400 font-semibold">Decapsulation (Unpackaging) </span>
+              is the reverse process on the receiving host: as bits arrive at the Physical layer and climb up to the Application layer, each layer validates checksums, unpacks and strips its specific header, and forwards the inner payload up the protocol stack.
+            </p>
           </div>
 
-          <AnimationControls
-            isPlaying={isPlaying}
-            currentStep={animStep}
-            totalSteps={ENCAP_STEPS.length}
-            speed={speed}
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
-            onReset={() => { setIsPlaying(false); setAnimStep(0); }}
-            onStepForward={() => setAnimStep((s) => Math.min(s + 1, ENCAP_STEPS.length - 1))}
-            onStepBack={() => setAnimStep((s) => Math.max(s - 1, 0))}
-            onSpeedChange={setSpeed}
-            stepLabel={ENCAP_STEPS[animStep]?.label}
-          />
+          {/* Interactive Visual Studio */}
+          <OSIEncapDecapVisualizer />
 
-          {/* Visual encapsulation stack */}
-          <div className="flex flex-col items-center space-y-2">
-            {ENCAP_STEPS.slice(0, animStep + 1).map((step, i) => {
-              const color = osiLayerColor(step.layer);
-              const isActive = i === animStep;
+          {/* Mnemonic reminder */}
+          <div className="glass rounded-xl p-5 border border-white/[0.06]">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
+                🧠 OSI Memory Aids & Mnemonics
+              </p>
+              <span className="text-[10px] text-slate-500 font-mono">Top-to-Bottom (7 ➔ 1) & Bottom-to-Top (1 ➔ 7)</span>
+            </div>
 
-              return (
-                <motion.div
-                  key={step.layer}
-                  initial={{ opacity: 0, scale: 0.9, y: -10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  className="w-full max-w-lg rounded-xl border px-5 py-3 transition-all"
-                  style={{
-                    borderColor: isActive ? color : `${color}30`,
-                    backgroundColor: isActive ? `${color}15` : `${color}05`,
-                    boxShadow: isActive ? `0 0 20px ${color}25` : 'none',
-                  }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <span
-                        className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold font-mono"
-                        style={{ backgroundColor: isActive ? color : `${color}30`, color: isActive ? '#fff' : color }}
-                      >
-                        {step.layer}
-                      </span>
-                      <span className="text-sm font-medium" style={{ color: isActive ? '#fff' : `${color}cc` }}>
-                        {step.header}
-                      </span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white/[0.02] p-3 rounded-lg border border-white/[0.04] space-y-2">
+                <div className="text-xs font-semibold text-violet-400">Top-Down (Encapsulation 7 ➔ 1):</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    ['A', 'All', 'App'],
+                    ['P', 'People', 'Pres'],
+                    ['S', 'Seem', 'Sess'],
+                    ['T', 'To', 'Trans'],
+                    ['N', 'Need', 'Net'],
+                    ['D', 'Data', 'DataLink'],
+                    ['P', 'Processing', 'Phys'],
+                  ].map(([letter, word, layer]) => (
+                    <div key={layer} className="glass rounded-lg px-2 py-1 text-center min-w-[42px]">
+                      <div className="text-violet-400 font-bold text-sm leading-none">{letter}</div>
+                      <div className="text-white text-[10px] font-medium">{word}</div>
+                      <div className="text-slate-500 text-[9px]">{layer}</div>
                     </div>
-                    {isActive && (
-                      <motion.span
-                        initial={{ opacity: 0, x: 10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="text-xs text-slate-400 max-w-[50%] text-right"
-                      >
-                        {step.label}
-                      </motion.span>
-                    )}
-                  </div>
-                </motion.div>
-              );
-            })}
-
-            {/* Arrows */}
-            {animStep > 0 && (
-              <div className="flex items-center gap-6 pt-2">
-                <div className="flex items-center gap-1.5 text-xs text-electric-400">
-                  <ArrowDown size={14} />
-                  <span>Sender (encapsulate)</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-xs text-emerald-400">
-                  <ArrowUp size={14} />
-                  <span>Receiver (decapsulate)</span>
+                  ))}
                 </div>
               </div>
-            )}
-          </div>
 
-          {/* Mnemonic */}
-          <div className="glass rounded-xl p-4">
-            <p className="text-xs text-slate-500 mb-2 uppercase tracking-wider">Mnemonic (top to bottom)</p>
-            <div className="flex flex-wrap gap-2">
-              {[
-                ['A', 'All', 'Application'],
-                ['P', 'People', 'Presentation'],
-                ['S', 'Seem', 'Session'],
-                ['T', 'To', 'Transport'],
-                ['N', 'Need', 'Network'],
-                ['D', 'Data', 'Data Link'],
-                ['P', 'Processing', 'Physical'],
-              ].map(([letter, word, layer]) => (
-                <div key={layer} className="glass rounded-lg px-2.5 py-1.5 text-center">
-                  <div className="text-electric-400 font-bold text-lg leading-none">{letter}</div>
-                  <div className="text-slate-300 text-[11px]">{word}</div>
-                  <div className="text-slate-600 text-[10px]">{layer}</div>
+              <div className="bg-white/[0.02] p-3 rounded-lg border border-white/[0.04] space-y-2">
+                <div className="text-xs font-semibold text-emerald-400">Bottom-Up (Decapsulation 1 ➔ 7):</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    ['P', 'Please', 'Phys'],
+                    ['D', 'Do', 'DataLink'],
+                    ['N', 'Not', 'Net'],
+                    ['T', 'Throw', 'Trans'],
+                    ['S', 'Sausage', 'Sess'],
+                    ['P', 'Pizza', 'Pres'],
+                    ['A', 'Away', 'App'],
+                  ].map(([letter, word, layer]) => (
+                    <div key={layer} className="glass rounded-lg px-2 py-1 text-center min-w-[42px]">
+                      <div className="text-emerald-400 font-bold text-sm leading-none">{letter}</div>
+                      <div className="text-white text-[10px] font-medium">{word}</div>
+                      <div className="text-slate-500 text-[9px]">{layer}</div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
